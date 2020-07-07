@@ -9,7 +9,7 @@ Alpha-Refine can significantly boost their tracking performance, in no need of j
 ## Architecture
 The overall architecture is shown below
 <div align="left">
-  <img src="video_demos/AlphaRefine.jpg" width="800px" />
+  <img src="video_demos/AlphaRefine.jpg" width="600px" />
 </div>
 
 ## Video Demos  
