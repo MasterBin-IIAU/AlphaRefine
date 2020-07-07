@@ -3,8 +3,14 @@
 - The complete code and trained model will be released  
 
 ## Introduction
-Alpha-Refine is an accurate, fast, and general refinement module. When combined with existing base trackers, 
+**Alpha-Refine** is an accurate, fast, and general refinement module. When combined with existing base trackers, 
 Alpha-Refine can significantly boost their tracking performance, in no need of joint training or fine-tuning.
+
+## Architecture
+The overall architecture is shown below
+<div align="center">
+  <img src="video_demos/AlphaRefine.jpg" width="400px" />
+</div>
 
 ## Video Demos  
 <div align="center">
