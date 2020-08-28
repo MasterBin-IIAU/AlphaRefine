@@ -1,0 +1,33 @@
+{
+  "baseline": [
+    {
+      "tracker_name": "AlphaRef",
+      "vot.analysis.measures.AccuracyRobustnessMultiStart": [
+        0.7123273167510574,
+        0.7773859806770522,
+        19945
+      ],
+      "vot.analysis.measures.EAOMultiStart": 0.4932142496109009
+    }
+  ],
+  "unsupervised": [
+    {
+      "tracker_name": "AlphaRef",
+      "vot.analysis.measures.AverageAccuracy": [
+        0.5902447837442031,
+        19945
+      ]
+    }
+  ],
+  "realtime": [
+    {
+      "tracker_name": "AlphaRef",
+      "vot.analysis.measures.AccuracyRobustnessMultiStart": [
+        0.7121961615220295,
+        0.7879049507097234,
+        19945
+      ],
+      "vot.analysis.measures.EAOMultiStart": 0.4992353320121765
+    }
+  ]
+}
