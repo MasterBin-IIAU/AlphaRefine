@@ -2,7 +2,7 @@
 
 ## News
 - :trophy: **Alpha-Refine wins VOT2020 Real-Time Challenge!**
-
+- **2020.08.29 Our presentation [slide](VOT20-RT-Report.pdf) has been uploaded.**
 ## Run Alpha-Refine on VOT2020
 The code for VOT2020 participation has been uploaded to **AlphaRefine_submit** directory. 
 Please following README.md under that directory to run our tracker.
