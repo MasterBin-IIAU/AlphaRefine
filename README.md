@@ -1,7 +1,7 @@
 # Alpha-Refine: Boosting Tracking Performance by Precise Bounding Box Estimation
 
 ## News
-- :trophy: **Alpha-Refine wins VOT2020 Real-Time Challenge!**
+- :trophy: **Alpha-Refine wins VOT2020 Real-Time Challenge with EAOMultistart 0.499!** 
 - **2020.08.29 Our presentation [slide](VOT20-RT-Report.pdf) has been uploaded.**
 ## Run Alpha-Refine on VOT2020
 The code for VOT2020 participation has been uploaded to **AlphaRefine_submit** directory. 
