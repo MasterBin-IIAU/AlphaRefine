@@ -80,6 +80,7 @@ pip install git+https://github.com/votchallenge/vot-toolkit-python
 ```
 conda install pillow=6.1
 ```
+* Modify [paths](https://github.com/MasterBin-IIAU/AlphaRefine/blob/46bec7318702090199a49306ff3d597c2fc140f9/AlphaRefine_submit/AlphaRefine/trackers.ini#L6) to the real path on your machine. 
 # Evaluation
 * Go to AlphaRefine dir and modify some paths  
 Modify paths in 'trackers.ini' and 'exp.sh' to your real paths.
