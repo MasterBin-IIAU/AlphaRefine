@@ -1,8 +1,9 @@
 # Alpha-Refine: Boosting Tracking Performance by Precise Bounding Box Estimation
 This repo provides the official implementation of AlphaRefine tracker, which wins the VOT2020 Real-Time Challenge. The implementation of our [latest arxiv paper](https://arxiv.org/abs/2012.06815) will also be released here. 
 ## News
+- AlphaRefine is accepted by the **CVPR2021**
 - :trophy: **Alpha-Refine wins VOT2020 Real-Time Challenge with EAOMultistart 0.499!** 
-- **2020.08.29 Our presentation [slide](VOT20-RT-Report.pdf) has been uploaded.**
+- VOT2020 winner presentation [slide](VOT20-RT-Report.pdf) has been uploaded.**
 ## Run Alpha-Refine on VOT2020
 The code for VOT2020 participation has been uploaded to **AlphaRefine_submit** directory. 
 Please following README.md under that directory to run our tracker.
