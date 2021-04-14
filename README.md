@@ -1,6 +1,8 @@
 # Alpha-Refine
 This is the official implementation of [Alpha-Refine: Boosting Tracking Performance by Precise Bounding Box Estimation
 ](https://arxiv.org/abs/2012.06815)
+
+A more detailed document is on its way.
 ![Architecture](doc/asset/AR-Architecture.png)
 ## Getting Start
 
