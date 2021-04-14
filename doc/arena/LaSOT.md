@@ -1,4 +1,10 @@
-Download the model
+#### Dowload Models
+
+#### Arrange LaSOT Dataset
+In order to evaluate with the scripts, `arena/LaSOT/tools/pick_LaSOT_test.py`
+
+##### Download AlphaRefine
+We recommend download the model into `ltr/checkpoints/ltr/SEx_beta`
 
 
 #### Run Experiment Scripts

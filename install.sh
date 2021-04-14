@@ -20,7 +20,7 @@ conda activate $conda_env_name
 echo ""
 echo ""
 echo "****************** Installing pytorch with cuda10 ******************"
-# conda install -y pytorch torchvision cudatoolkit=10.0 -c pytorch
+# conda install -y pytorch torchvision cudatoolkit=10.0 -c pytorch  # the pytracking setup script install the newest version of pytroch by default, which may lead to some problems
 conda install -y pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=10.0 -c pytorch
 
 echo ""
@@ -103,33 +103,9 @@ pip install jpeg4py
 echo ""
 echo ""
 echo "****************** Installing ninja-build to compile PreROIPooling ******************"
+
 echo "************************* Need sudo privilege ******************"
 sudo apt-get install ninja-build
-
-cd pysot
-python setup.py build_ext --inplace
-
-
-echo ""
-echo ""
-echo "****************** Downloading networks ******************"
-mkdir pytracking/networks
-
-echo ""
-echo ""
-echo "****************** DiMP50 Network ******************"
-# gdown https://drive.google.com/uc\?id\=1qgachgqks2UGjKx-GdO1qylBDdB1f9KN -O pytracking/networks/dimp50.pth
-# gdown https://drive.google.com/uc\?id\=1MAjrRJDCbL0DSjUKFyDkUuYS1-cYBNjk -O pytracking/networks/dimp18.pth
-
-# echo ""
-# echo ""
-# echo "****************** ATOM Network ******************"
-# gdown https://drive.google.com/uc\?id\=1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU -O pytracking/networks/atom_default.pth
-
-# echo ""
-# echo ""
-# echo "****************** ECO Network ******************"
-# gdown https://drive.google.com/uc\?id\=1aWC4waLv_te-BULoy0k-n_zS-ONms21S -O pytracking/networks/resnet18_vggmconv1.pth
 
 echo ""
 echo ""
@@ -156,5 +132,5 @@ echo "****************** Installation complete! ******************"
 
 echo ""
 echo ""
-echo "****************** More networks can be downloaded from the google drive folder https://drive.google.com/drive/folders/1WVhJqvdu-_JG1U-V0IqfxTUa1SBPnL0O ******************"
+echo "****************** More pytracking networks can be downloaded from the google drive folder https://drive.google.com/drive/folders/1WVhJqvdu-_JG1U-V0IqfxTUa1SBPnL0O ******************"
 echo "****************** Or, visit the model zoo at https://github.com/visionml/pytracking/blob/master/MODEL_ZOO.md ******************"

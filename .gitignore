@@ -1,0 +1,9 @@
+.idea/
+__pycache__/
+*.pth
+*.pth.tar
+local.py
+log*.txt
+pytracking/pytracking.egg-info/
+pytracking/pytracking
+*.egg*

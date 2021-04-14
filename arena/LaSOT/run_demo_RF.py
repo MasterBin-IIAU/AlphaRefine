@@ -78,10 +78,8 @@ def main():
             # test one special video
             if video.name != args.video:
                 continue
-        toc = 0
+
         pred_bboxes = []
-        scores = []
-        track_times = []
         for idx, (img, gt_bbox) in enumerate(video):
             cx, cy, w, h = get_axis_aligned_bbox(np.array(gt_bbox))
             gt_bbox_ = [cx - (w - 1) / 2, cy - (h - 1) / 2, w, h]
@@ -112,11 +110,13 @@ def main():
                 '''Track'''
                 outputs = tracker.track(img_RGB)
                 pred_bbox = outputs['target_bbox']
-                '''##### refine tracking results #####'''
+
+                ''' refine tracking results '''
                 pred_bbox = RF_module.refine(cv2.cvtColor(img, cv2.COLOR_BGR2RGB),
                                              np.array(pred_bbox))
                 x1, y1, w, h = pred_bbox.tolist()
                 w, h = get_mean_wh(pred_bboxes, w, h)
+
                 '''add boundary and min size limit'''
                 x1, y1, x2, y2 = bbox_clip(x1, y1, x1 + w, y1 + h, (H, W))
                 w = x2 - x1
@@ -124,13 +124,14 @@ def main():
                 new_pos = torch.from_numpy(np.array([y1 + h / 2, x1 + w / 2]).astype(np.float32))
                 new_target_sz = torch.from_numpy(np.array([h, w]).astype(np.float32))
                 new_scale = torch.sqrt(new_target_sz.prod() / tracker.base_target_sz.prod())
-                ##### update
+
+                # update
                 tracker.pos = new_pos.clone()
                 tracker.target_sz = new_target_sz
                 tracker.target_scale = new_scale
 
                 pred_bboxes.append(pred_bbox)
-                # scores.append(outputs['best_score'])
+
             toc += cv2.getTickCount() - tic
             track_times.append((cv2.getTickCount() - tic)/cv2.getTickFrequency())
             if idx == 0:
@@ -149,7 +150,6 @@ def main():
                     exit()
                 elif k == ord('s'):
                     cv2.imwrite(os.path.join(os.environ['HOME'], 'Desktop/demo', video.name+'_{}.jpg'.format(idx)), img)
-        # toc /= cv2.getTickFrequency()
 
         # save results
         model_path = os.path.join(save_dir, args.dataset, model_name)
@@ -160,8 +160,6 @@ def main():
             for x in pred_bboxes:
                 f.write(','.join([str(i) for i in x])+'\n')
         print(video.name)
-        # print('({:3d}) Video: {:12s} Time: {:5.1f}s Speed: {:3.1f}fps'.format(
-        #     v_idx+1, video.name, toc, idx / toc))
 
 
 def get_mean_wh(boxes, w, h, lam=0.7):

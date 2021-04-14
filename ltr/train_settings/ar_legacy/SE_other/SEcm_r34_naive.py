@@ -10,17 +10,14 @@ from ltr.data.ardata import SEprocessing, SEsampler, LTRLoader
 import ltr.data.ardata.transforms as dltransforms
 from ltr import actors
 from ltr.trainers import LTRTrainer
-from ltr.models.loss.iou_loss import IOULoss_mean
-import ltr.models.SEx_beta.SEcm_r34 as SEx
+import ltr.models.ar_legacy.SEcm_xfuse.SEcm_r34 as SEx
 
 
 def run(settings):
-    """ Training Entry """
 
-    ''' ##### Configure the training parameters for AlphaRefine ##### '''
     # Most common settings are assigned in the settings struct
     settings.description = 'Settings of SEcm module'
-    ''' !!! some important hyperparameters !!! '''
+    '''!!! some important hyperparameters !!!'''
     settings.batch_size = 32  # Batch size
     settings.search_area_factor = 2.0  # Image patch size relative to target size
     settings.feature_sz = 16  # Size of feature map
@@ -30,7 +27,7 @@ def run(settings):
     settings.center_jitter_factor = {'train': 0, 'test': 0.25}
     settings.scale_jitter_factor = {'train': 0, 'test': 0.25}
     settings.max_gap = 50
-    settings.sample_per_epoch = 4000
+    settings.sample_per_epoch = 4000  # 由于batchsize比原来更小了,所以我把这个值又翻了一倍
 
     '''others'''
     settings.print_interval = 100  # How often to print loss and other info
@@ -38,8 +35,8 @@ def run(settings):
     settings.normalize_mean = [0.485, 0.456, 0.406]  # Normalize mean (default pytorch ImageNet values)
     settings.normalize_std = [0.229, 0.224, 0.225]  # Normalize std (default pytorch ImageNet values)
 
-    ''' ##### Prepare data for training and validation ##### '''
-    ''' 1. build trainning dataset and dataloader '''
+    '''##### Prepare data for training and validation #####'''
+    '''1. build trainning dataset and dataloader'''
     # The joint augmentation transform, that is applied to the pairs jointly
     transform_joint = dltransforms.ToGrayscale(probability=0.05)
     # The augmentation transform applied to the training set (individually to each image in the pair)
@@ -49,40 +46,41 @@ def run(settings):
     # Data processing to do on the training pairs
     '''Data_process class. In SEMaskProcessing, we use zero-padding for images and masks.'''
     data_processing_train = SEprocessing.SEMaskProcessing(search_area_factor=settings.search_area_factor,
-                                                          output_sz=settings.output_sz,
-                                                          center_jitter_factor=settings.center_jitter_factor,
-                                                          scale_jitter_factor=settings.scale_jitter_factor,
-                                                          mode='sequence',
-                                                          transform=transform_train,
-                                                          joint_transform=transform_joint)
+                                                        output_sz=settings.output_sz,
+                                                        center_jitter_factor=settings.center_jitter_factor,
+                                                        scale_jitter_factor=settings.scale_jitter_factor,
+                                                        mode='sequence',
+                                                        transform=transform_train,
+                                                        joint_transform=transform_joint)
     # Train datasets
-    # - bbox and corner datasets
+    # -bbox and corner datasets
     got_10k_train = Got10k(settings.env.got10k_dir, split='train')
     lasot_train = Lasot(split='train')
     coco_train = MSCOCOSeq()
     imagenet_vid = ImagenetVID()
     imagenet_det = ImagenetDET()
 
-    # - mask datasets
+    # -mask datasets
     youtube_vos = Youtube_VOS()
     saliency = Saliency()
 
     # The sampler for training
     '''Build training dataset. focus on "__getitem__" and "__len__"'''
     dataset_train = SEsampler.SEMaskSampler([lasot_train,got_10k_train,coco_train,imagenet_vid,imagenet_det,youtube_vos,saliency],
-                                            [1, 1, 1, 1, 1, 2, 3],
-                                            samples_per_epoch= settings.sample_per_epoch * settings.batch_size,
-                                            max_gap=settings.max_gap,
-                                            processing=data_processing_train)
+                                        [1,1,1,1,1,2,3],
+                                        samples_per_epoch= settings.sample_per_epoch * settings.batch_size,
+                                        max_gap=settings.max_gap,
+                                        processing=data_processing_train)
 
     # The loader for training
-    ''' using distributed sampler '''
+    '''using distributed sampler'''
     train_sampler = DistributedSampler(dataset_train)
-    ''' "sampler" is exclusive with "shuffle" '''
+    '''"sampler" is exclusive with "shuffle"'''
     loader_train = LTRLoader('train', dataset_train, training=True, batch_size=settings.batch_size, num_workers=settings.num_workers,
                              drop_last=True, stack_dim=1, sampler=train_sampler, pin_memory=False)
 
-    ''' 2. build validation dataset and dataloader '''
+
+    '''2. build validation dataset and dataloader'''
     lasot_test = Lasot(split='test')
     # The augmentation transform applied to the validation set (individually to each image in the pair)
     transform_val = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),
@@ -97,14 +95,14 @@ def run(settings):
                                                         joint_transform=transform_joint)
     # The sampler for validation
     dataset_val = SEsampler.SEMaskSampler([lasot_test], [1], samples_per_epoch=500*settings.batch_size, max_gap=50,
-                                          processing=data_processing_val)
+                                      processing=data_processing_val)
 
-    # The loader for validation
+    #The loader for validation
     loader_val = LTRLoader('val', dataset_val, training=False, batch_size=settings.batch_size, num_workers=settings.num_workers,
                            shuffle=False, drop_last=True, epoch_interval=5, stack_dim=1)
 
     # Create network
-    net = SEx.SEcm_resnet34(backbone_pretrained=True,
+    net = SEx.SEcm_resnet34_naive(backbone_pretrained=True,
                             used_layers=settings.used_layers,
                             pool_size=int(settings.feature_sz / 2),
                             unfreeze_layer3=True)
