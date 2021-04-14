@@ -1,4 +1,7 @@
 # Alpha-Refine
+# NEWS
+Alpha-Refine is accepted by the **CVPR2021**
+
 This is the official implementation of [Alpha-Refine: Boosting Tracking Performance by Precise Bounding Box Estimation
 ](https://arxiv.org/abs/2012.06815)
 
@@ -70,15 +73,15 @@ The checkpoints will be saved in `ltr/checkpoints/ltr/$sub1/$sub2/SEcmnet_ep00*.
 
      | Tracker                   | Success Score    | Speed (fps) | Paper/Code |
      |:-----------               |:----------------:|:----------------:|:----------------:|
-     | ARDiMP (ours)             | 0.654  |  32 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/This Repo/[Result](https://drive.google.com/file/d/1UNPwz7qP8SeBTxHF_Cw0JLmrN1jTqJJE/view?usp=sharing) |
+     | **ARDiMP (ours)**             | 0.654  |  32 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/This Repo/[Result](https://drive.google.com/file/d/1UNPwz7qP8SeBTxHF_Cw0JLmrN1jTqJJE/view?usp=sharing) |
      | Siam R-CNN (CVPR20)       | 0.648  |  5 (Tesla V100)   |   [Paper](https://arxiv.org/pdf/1911.12836.pdf)/[Code](https://github.com/VisualComputingInstitute/SiamR-CNN) |
-     | DimpSuper                 | 0.631  |  39 (RTX 2080Ti)  |   [Paper](https://arxiv.org/pdf/2003.12565.pdf)/[Code](https://github.com/visionml/pytracking)  |
-     | ARDiMP50 (ours)           | 0.602  |  46 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/This Repo/[Result](https://drive.google.com/file/d/1wJc_-1lCxeGlqEAKd1qER1x_4bWAhujv/view?usp=sharing)  |
+     | DiMPSuper                 | 0.631  |  39 (RTX 2080Ti)  |   [Paper](https://arxiv.org/pdf/2003.12565.pdf)/[Code](https://github.com/visionml/pytracking)  |
+     | **ARDiMP50 (ours)**           | 0.602  |  46 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/This Repo/[Result](https://drive.google.com/file/d/1wJc_-1lCxeGlqEAKd1qER1x_4bWAhujv/view?usp=sharing)  |
      | PrDiMP50 (CVPR20)         | 0.598  |  30 (Unkown GPU)  |   [Paper](https://arxiv.org/pdf/2003.12565.pdf)/[Code](https://github.com/visionml/pytracking)  |
      | LTMU (CVPR20)             | 0.572  |  13 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2004.00305)/[Code](https://github.com/Daikenan/LTMU) |
      | DiMP50 (ICCV19)           | 0.568  |  59 (RTX 2080Ti)  |   [Paper](https://arxiv.org/pdf/1904.07220.pdf)/[Code](https://github.com/visionml/pytracking)  |
      | Ocean (ECCV20)            | 0.560  |  25 (Tesla V100)  |   [Paper](https://arxiv.org/abs/2006.10721)/[Code](https://github.com/researchmm/TracKit) |  
-     | ARSiamRPN (ours)          | 0.560  |  50 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/This Repo/[Result](https://drive.google.com/file/d/1u-ou43O_RU9oRFx1UKjzeYe6e-4qnMZZ/view?usp=sharing) |  
+     | **ARSiamRPN (ours)**          | 0.560  |  50 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/This Repo/[Result](https://drive.google.com/file/d/1u-ou43O_RU9oRFx1UKjzeYe6e-4qnMZZ/view?usp=sharing) |  
      | SiamAttn (CVPR20)         | 0.560  |  45 (RTX 2080Ti)  |   [Paper](https://arxiv.org/pdf/2004.06711.pdf)/[Code]() |
      | SiamFC++GoogLeNet (AAAI20)| 0.544  |  90 (RTX 2080Ti)  |   [Paper](https://arxiv.org/pdf/1911.06188.pdf)/[Code](https://github.com/MegviiDetection/video_analyst) |
      | MAML-FCOS (CVPR20)        | 0.523  |  42 (NVIDIA P100) |   [Paper](https://arxiv.org/pdf/2004.00830.pdf)/[Code]() |
