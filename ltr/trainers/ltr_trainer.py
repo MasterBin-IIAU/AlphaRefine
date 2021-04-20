@@ -135,3 +135,27 @@ class LTRTrainer(BaseTrainer):
             self.tensorboard_writer.write_info(self.settings.module_name, self.settings.script_name, self.settings.description)
 
         self.tensorboard_writer.write_epoch(self.stats, self.epoch)
+
+    def load_pretrained(self, checkpoint=None, fields=None, ignore_fields=None, load_constructor=False):
+        """ Loads a pre-trained network parameter from a checkpoint file. """
+        from ltr.admin import loading, multigpu
+
+        net = self.actor.net.module if multigpu.is_multi_gpu(self.actor.net) else self.actor.net
+
+        net_type = type(net).__name__
+
+        # Load network
+        print("load from: {}".format(checkpoint))
+        checkpoint_dict = loading.torch_load_legacy(checkpoint)
+
+        assert net_type == checkpoint_dict['net_type'], 'Network is not of correct type.'
+
+        if fields is None:
+            fields = checkpoint_dict.keys()
+
+        # Load all fields
+        for key in fields:
+            if key == 'net':
+                net.load_state_dict(checkpoint_dict[key])
+
+        return True

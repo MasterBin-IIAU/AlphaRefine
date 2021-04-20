@@ -83,7 +83,7 @@ class Youtube_VOS(BaseDataset):
             max_target_area - max allowed ratio between target area and image area. Can be used to filter out targets
                                 which cover complete image.
         """
-        root = env_settings().youtube_vos_dir if root is None else root
+        root = env_settings().youtubevos_dir if root is None else root
         super().__init__(root, image_loader)
 
         cache_file = os.path.join(root, 'cache.json')

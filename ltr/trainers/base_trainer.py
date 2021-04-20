@@ -48,7 +48,7 @@ class BaseTrainer:
         else:
             self._checkpoint_dir = None
 
-    def train(self, max_epochs, load_latest=False, fail_safe=True):
+    def train(self, max_epochs, load_latest=False, fail_safe=True, save_interval=5):
         """Do training for the given number of epochs.
         args:
             max_epochs - Max number of training epochs,
@@ -72,7 +72,7 @@ class BaseTrainer:
                         self.lr_scheduler.step()
 
                     if self._checkpoint_dir:
-                        if self.settings.local_rank == 0:
+                        if self.settings.local_rank == 0 and (epoch % save_interval) == 0:
                             self.save_checkpoint()
             except:
                 print('Training crashed at epoch {}'.format(epoch))

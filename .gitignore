@@ -8,3 +8,4 @@ pytracking/pytracking.egg-info/
 pytracking/pytracking
 *.egg*
 *.pyc
+tensorboard/

@@ -1,12 +1,12 @@
+""" ============== multi-gpu training reference ===================
+https://pytorch.org/tutorials/intermediate/ddp_tutorial.html
+https://github.com/tczhangzhi/pytorch-distributed """
+
 import argparse
 import importlib
 import cv2 as cv
 import torch.backends.cudnn
 
-'''for multi-gpu training
-https://pytorch.org/tutorials/intermediate/ddp_tutorial.html
-https://github.com/tczhangzhi/pytorch-distributed
-'''
 import torch.distributed as dist
 import ltr.admin.settings as ws_settings
 

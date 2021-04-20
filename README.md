@@ -126,18 +126,18 @@ The training code is based on [Pytracking](https://github.com/visionml/pytrackin
     An example `ltr/admin/local.py.example` is also provided.
     
 
-### Setting Up the Datasets
-The training recipe are placed in `ltr/train_settings` (e.g. `ltr/train_settings/SEx_beta/SEcm_r34.py`), you can
-configure the *training parameters* and *Dataloaders*. The `path/to/data` should be specified in `ltr/admin/local.py` to make
-the *Dataloaders* find the data.
-
 ### Run Training Scripts
-For the recipe `ltr/train_settings/$sub1/$sub2.py` run the following command to launch the training procedure.
+
+The training recipes are placed in `ltr/train_settings` (e.g. `ltr/train_settings/SEx_beta/SEcm_r34.py`), you can
+configure the *training parameters* and *Dataloaders*. 
+
+For a recipe named `ltr/train_settings/$sub1/$sub2.py`, run the following command to launch the training procedure.
 ```
+
 python -m torch.distributed.launch --nproc_per_node=8 \
         run_training_multigpu.py $sub1 $sub2 
 ```
-The checkpoints will be saved in `ltr/checkpoints/ltr/$sub1/$sub2/SEcmnet_ep00*.pth.tar`.
+The checkpoints will be saved in `AlphaRefine/checkpoints/ltr/$sub1/$sub2/SEcmnet_ep00*.pth.tar`.
 
 
 ## Performance
