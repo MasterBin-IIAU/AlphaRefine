@@ -26,9 +26,17 @@ We take [arena/LaSOT/run_dimp_RF.py](arena/LaSOT/run_dimp_RF.py) as an example:
 
 2. Check if you have specified the 'dataset_root_' as the `path/to/the/LaSOT_test`.
 
-##### run the following command
+##### run the inference script
 ```
 cd arena/LaSOT
 python run_dimp_RF.py
+```
+The result files will be saved in `arena/LaSOT/analysis`
+##### evaluate the result files
+```
+# evaluate all the results under 'analysis/'
 python eval.py
+
+# using --tracker_prefix to specify the result to evaluate
+python eval.py --tracker_prefix ${exp_name}
 ```

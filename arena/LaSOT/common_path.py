@@ -5,7 +5,7 @@ video_name_ = ''  # 'airplane-9'
 
 ######################################################################
 dataset_root_ = '/home/zxy/Downloads/AR_Data/LaSOT_Test'
-save_dir = 'analysis'
+save_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../analysis'))
 
 ######################### Refine Module ################################
 # model_dir = '/home/zxy/Desktop/AlphaRefine/pytracking/ltr/checkpoints/ltr/'
