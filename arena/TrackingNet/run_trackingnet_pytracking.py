@@ -10,7 +10,7 @@ import argparse
 import cv2
 import torch
 import numpy as np
-from external.pysot.pysot import get_axis_aligned_bbox
+from external.pysot.pysot.utils.bbox import get_axis_aligned_bbox
 
 from arena.TrackingNet.common_path import save_dir, dataset_root_
 

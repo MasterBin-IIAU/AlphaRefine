@@ -10,11 +10,11 @@ import cv2
 import torch
 import numpy as np
 
-from external.pysot.pysot.core import cfg
-from external.pysot.pysot.models import ModelBuilder
+from external.pysot.pysot.core.config import cfg
+from external.pysot.pysot.models.model_builder import ModelBuilder
 from external.pysot.pysot.tracker.tracker_builder import build_tracker
-from external.pysot.pysot import load_pretrain
-from external.pysot.pysot import get_axis_aligned_bbox
+from external.pysot.pysot.utils.model_load import load_pretrain
+from external.pysot.pysot.utils.bbox import get_axis_aligned_bbox
 from pytracking.RF_utils import bbox_clip
 from pytracking.refine_modules.refine_module import RefineModule
 
