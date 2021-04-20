@@ -1,4 +1,29 @@
-#### Dowload Models
+#### Download AlphaRefine Models
+We provide the models of *AlphaRefine* here. The **AUC** and **Latency** are tested with SiamRPN++ as the base tracker
+on *LaSOT* dataset, using a RTX 2080Ti GPU.
+
+We recommend download the model into `ltr/checkpoints/ltr/SEx_beta`. 
+
+| Tracker        | Backbone         | Latency     | AUC(%)   |  Model  |
+|:--------------:|:----------------:|:-----------:|:-----------:|:----------------:|
+| AR34<sub>c+m</sub> | ResNet34     |  5.1ms  |  55.9  |   [model](https://drive.google.com/file/d/1drLqNq4r9g4ZqGtOGuuLCmHJDh20Fu1m/view?usp=sharing)|
+| AR18<sub>c+m</sub> | ResNet18     |  4.2ms  |  55.0  |   [model](https://drive.google.com/file/d/1ANf0KCvlFBbGQPpvT-3WNiy414ANkgLZ/view?usp=sharing)|
+
+When combined with more powerful base trackers, 
+*AlphaRefine* leads to very competitive tracking systems (e.g. *ARDiMP*). 
+Following are some of the best performed trackers on LaSOT. 
+More results are present in [Performance](#performance)
+
+| Tracker                   | AUC(%)    | Speed (fps) | Paper/Code |
+|:-----------               |:----------------:|:----------------:|:----------------:|
+| ARDiMP (ours)             | 65.4  |  32 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/[Result](https://drive.google.com/file/d/1UNPwz7qP8SeBTxHF_Cw0JLmrN1jTqJJE/view?usp=sharing) |
+| Siam R-CNN (CVPR20)       | 64.8  |  5 (Tesla V100)   |   [Paper](https://arxiv.org/pdf/1911.12836.pdf)/[Code](https://github.com/VisualComputingInstitute/SiamR-CNN) |
+| DimpSuper                 | 63.1  |  39 (RTX 2080Ti)  |   [Paper](https://arxiv.org/pdf/2003.12565.pdf)/[Code](https://github.com/visionml/pytracking)  |
+| ARDiMP50 (ours)           | 60.2  |  46 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/[Result](https://drive.google.com/file/d/1wJc_-1lCxeGlqEAKd1qER1x_4bWAhujv/view?usp=sharing)  |
+| PrDiMP50 (CVPR20)         | 59.8  |  30 (Unkown GPU)  |   [Paper](https://arxiv.org/pdf/2003.12565.pdf)/[Code](https://github.com/visionml/pytracking)  |
+| LTMU (CVPR20)             | 57.2  |  13 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2004.00305)/[Code](https://github.com/Daikenan/LTMU) |
+
+
 
 #### Arrange LaSOT Dataset
 We borrow the LaSOT evaluation code from [pysot](https://github.com/StrangerZhang/pysot-toolkit). 

@@ -1,4 +1,14 @@
-#### Dowload Models
+#### Download AlphaRefine Models
+We provide the models of *AlphaRefine* here. The **AUC** and **Latency** are tested with SiamRPN++ as the base tracker
+on *LaSOT* dataset, using a RTX 2080Ti GPU.
+
+We recommend download the model into `ltr/checkpoints/ltr/SEx_beta`. 
+
+| Tracker        | Backbone         | Latency     | AUC(%)   |  Model  |
+|:--------------:|:----------------:|:-----------:|:-----------:|:----------------:|
+| AR34<sub>c+m</sub> | ResNet34     |  5.1ms  |  55.9  |   [model](https://drive.google.com/file/d/1drLqNq4r9g4ZqGtOGuuLCmHJDh20Fu1m/view?usp=sharing)|
+| AR18<sub>c+m</sub> | ResNet18     |  4.2ms  |  55.0  |   [model](https://drive.google.com/file/d/1ANf0KCvlFBbGQPpvT-3WNiy414ANkgLZ/view?usp=sharing)|
+
 
 ##### Download AlphaRefine
 We recommend download the model into `ltr/checkpoints/ltr/SEx_beta`
