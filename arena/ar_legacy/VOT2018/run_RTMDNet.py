@@ -10,11 +10,11 @@ import cv2
 import torch
 import numpy as np
 '''dataset'''
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
-from pysot.toolkit.datasets import DatasetFactory
+from external.pysot.pysot.utils.bbox import get_axis_aligned_bbox
+from external.pysot.toolkit.datasets import DatasetFactory
 
 '''Tracker module'''
-from RT_MDNet.RT_MDNet import RT_MDNet
+from external.RT_MDNet.RT_MDNet import RT_MDNet
 
 
 '''Refine module'''

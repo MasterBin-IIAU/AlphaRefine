@@ -9,11 +9,11 @@ import argparse
 from glob import glob
 from tqdm import tqdm
 from multiprocessing import Pool
-from pysot.toolkit.datasets import OTBDataset, UAVDataset, LaSOTDataset, \
+from external.pysot.toolkit.datasets import OTBDataset, UAVDataset, LaSOTDataset, \
         VOTDataset, NFSDataset, VOTLTDataset
-from pysot.toolkit.evaluation import OPEBenchmark, AccuracyRobustnessBenchmark, \
+from external.pysot.toolkit.evaluation import OPEBenchmark, AccuracyRobustnessBenchmark, \
         EAOBenchmark, F1Benchmark
-from pysot.toolkit.visualization import draw_success_precision
+from external.pysot.toolkit.visualization import draw_success_precision
 import numpy as np
 from arena.ar_legacy.VOT2018.common_path import save_dir, dataset_root_
 

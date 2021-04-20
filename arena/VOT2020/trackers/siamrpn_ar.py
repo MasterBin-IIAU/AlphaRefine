@@ -1,20 +1,17 @@
 import os
 
 import numpy as np
-import torch
 
-from pytracking.evaluation import Tracker
 from pytracking.refine_modules.refine_module_vot20 import RefineModule
 
 from arena.VOT2020.utils import rect_from_mask, bbox_clip
 from arena.VOT2020.common_path import refine_path, sr, input_sz
 
-from pysot.pysot.models.model_builder import ModelBuilder
-from pysot.pysot.tracker.tracker_builder import build_tracker
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
-from pysot.pysot.utils.model_load import load_pretrain
+from external.pysot.pysot.models import ModelBuilder
+from external.pysot.pysot.tracker.tracker_builder import build_tracker
+from external.pysot.pysot import load_pretrain
 
-from pysot.pysot.core.config import cfg
+from external.pysot.pysot.core import cfg
 _project_path = os.path.join(os.path.dirname(__file__), '../../../pysot')
 _siam_model = 'siamrpn_r50_l234_dwxcorr'
 snapshot_path = os.path.join(_project_path, 'experiments/%s/model.pth' % _siam_model)

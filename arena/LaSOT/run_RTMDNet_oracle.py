@@ -6,19 +6,18 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import argparse
-import os
 import cv2
 import torch
 import numpy as np
 
 '''dataset'''
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
-from pysot.toolkit.datasets import DatasetFactory
+from external.pysot.pysot.utils.bbox import get_axis_aligned_bbox
+from external.pysot.toolkit.datasets import DatasetFactory
 '''Tracker module'''
-from RT_MDNet.RT_MDNet import RT_MDNet
+from external.RT_MDNet.RT_MDNet import RT_MDNet
 
 from arena.LaSOT.common_path import *
-from RT_MDNet.MDNet_utils import bbox_clip
+from external.RT_MDNet.MDNet_utils import bbox_clip
 
 parser = argparse.ArgumentParser(description='RT-MDNet Refine tracking')
 parser.add_argument('--dataset', default= dataset_name_, type=str,

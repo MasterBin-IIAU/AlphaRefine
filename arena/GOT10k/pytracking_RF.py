@@ -5,11 +5,10 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import cv2
 import torch
 import numpy as np
 
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
+from external.pysot.pysot import get_axis_aligned_bbox
 from pytracking.refine_modules.refine_module import RefineModule
 from pytracking.RF_utils import bbox_clip
 

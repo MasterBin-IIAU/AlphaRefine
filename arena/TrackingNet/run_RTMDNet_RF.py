@@ -11,16 +11,15 @@ import cv2
 import torch
 import numpy as np
 '''dataset'''
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
-from pysot.toolkit.datasets import DatasetFactory
-from pysot.toolkit.utils.region import vot_overlap, vot_float2str
+from external.pysot.pysot.utils.bbox import get_axis_aligned_bbox
+
 '''Tracker module'''
-from RT_MDNet.RT_MDNet import RT_MDNet
+from external.RT_MDNet.RT_MDNet import RT_MDNet
 '''Refine module'''
 from pytracking.refine_modules.refine_module import RefineModule
 
 from arena.TrackingNet.common_path import *
-from RT_MDNet.MDNet_utils import bbox_clip
+from external.RT_MDNet.MDNet_utils import bbox_clip
 
 parser = argparse.ArgumentParser(description='RT-MDNet Refine tracking')
 parser.add_argument('--dataset', default= dataset_name_, type=str,

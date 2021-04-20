@@ -1,16 +1,10 @@
 import numpy as np
-import torch
 
-from RT_MDNet.RT_MDNet import RT_MDNet
+from external.RT_MDNet.RT_MDNet import RT_MDNet
 from pytracking.refine_modules.refine_module_vot20 import RefineModule
 
 from arena.VOT2020.utils import rect_from_mask, bbox_clip
 from arena.VOT2020.common_path import refine_path, sr, input_sz
-
-from pysot.pysot.models.model_builder import ModelBuilder
-from pysot.pysot.tracker.tracker_builder import build_tracker
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
-from pysot.pysot.utils.model_load import load_pretrain
 
 
 class TrackerAR(object):

@@ -5,14 +5,13 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
 import argparse
 import cv2
 import torch
 import numpy as np
 
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
-from pysot.toolkit.datasets import DatasetFactory
+from external.pysot.pysot.utils.bbox import get_axis_aligned_bbox
+from external.pysot.toolkit.datasets import DatasetFactory
 from pytracking.refine_modules.refine_module import RefineModule
 from pytracking.RF_utils import bbox_clip
 
@@ -148,7 +147,7 @@ def main():
                 tracker.target_scale = new_scale
 
                 mask_pred = RF_module.get_mask(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), np.array(pred_bbox))
-                from pysot.toolkit.visualization.draw_mask import draw_mask
+                from external.pysot.toolkit.visualization import draw_mask
                 draw_mask(img, mask_pred, idx=idx, show=True, save_dir='dimpsuper_armask_crocodile-3')
 
                 pred_bboxes.append(pred_bbox)

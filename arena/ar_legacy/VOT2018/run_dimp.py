@@ -10,9 +10,9 @@ import cv2
 import torch
 import numpy as np
 
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
-from pysot.toolkit.datasets import DatasetFactory
-from pysot.toolkit.utils.region import vot_overlap, vot_float2str
+from external.pysot.pysot import get_axis_aligned_bbox
+from external.pysot.toolkit.datasets import DatasetFactory
+from external.pysot.toolkit import vot_overlap, vot_float2str
 
 # base tracker
 '''dimp'''

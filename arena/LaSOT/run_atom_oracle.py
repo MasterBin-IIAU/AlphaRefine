@@ -5,14 +5,13 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
 import argparse
 import numpy as np
 import cv2
 import torch
 
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
-from pysot.toolkit.datasets import DatasetFactory
+from external.pysot.pysot.utils.bbox import get_axis_aligned_bbox
+from external.pysot.toolkit.datasets import DatasetFactory
 from pytracking.RF_utils import bbox_clip
 
 # base tracker

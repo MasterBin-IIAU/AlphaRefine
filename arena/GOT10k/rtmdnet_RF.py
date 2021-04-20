@@ -6,13 +6,13 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import numpy as np
-from pysot.pysot.utils.bbox import get_axis_aligned_bbox
+from external.pysot.pysot.utils.bbox import get_axis_aligned_bbox
 
-from RT_MDNet.RT_MDNet import RT_MDNet
+from external.RT_MDNet.RT_MDNet import RT_MDNet
 from pytracking.refine_modules.refine_module import RefineModule
 
 from got10k.trackers import Tracker as GOT10kTracker
-from RT_MDNet.MDNet_utils import bbox_clip
+from external.RT_MDNet.MDNet_utils import bbox_clip
 from arena.GOT10k.common_path import *
 
 
