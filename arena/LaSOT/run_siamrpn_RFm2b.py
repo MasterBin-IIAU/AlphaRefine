@@ -19,7 +19,6 @@ from pysot.pysot.tracker.tracker_builder import build_tracker
 from pysot.pysot.utils.bbox import get_axis_aligned_bbox
 from pysot.pysot.utils.model_load import load_pretrain
 from pysot.toolkit.datasets import DatasetFactory
-from pysot.toolkit.utils.region import vot_overlap, vot_float2str
 
 from pytracking.refine_modules.refine_module import RefineModule, mask2bbox
 from pytracking.evaluation import Tracker

@@ -14,4 +14,4 @@ video_name_ = ''
 # video_name_ = 'airplane-9'
 #########################################################################################
 import os
-project_path_ = os.path.join(os.path.dirname(__file__), '../../pysot')
+project_path_ = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../pysot'))

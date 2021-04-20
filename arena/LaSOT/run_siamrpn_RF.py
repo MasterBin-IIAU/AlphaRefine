@@ -6,9 +6,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import argparse
-import os
-
-import sys
 
 import cv2
 import torch
@@ -19,10 +16,8 @@ from pysot.pysot.tracker.tracker_builder import build_tracker
 from pysot.pysot.utils.bbox import get_axis_aligned_bbox
 from pysot.pysot.utils.model_load import load_pretrain
 from pysot.toolkit.datasets import DatasetFactory
-from pysot.toolkit.utils.region import vot_overlap, vot_float2str
 
 from pytracking.refine_modules.refine_module import RefineModule
-from pytracking.evaluation import Tracker
 
 '''RF utils'''
 from pytracking.RF_utils import bbox_clip
@@ -46,12 +41,6 @@ torch.set_num_threads(1)
 n_iter = 1
 
 def main():
-    # refine_path = '/home/zxy/Desktop/AlphaRefine/pytracking/ltr/checkpoints/ltr/SE_other/SEc_r34/SEcmnet_ep0040.pth.tar'
-    # RF_type = 'AR_IoU'
-    # refine_path = '/home/zxy/Desktop/AlphaRefine/pytracking/ltr/checkpoints/ltr/SE_other/SEcm_r34_ARmask/SEcmnet_ep0040.pth.tar'
-    # RF_type = 'AR_mask'
-    refine_path = '/home/zxy/Desktop/AlphaRefine/ltr/checkpoints/ltr/SEex/SEex_r34/SEcmnet_ep0040.pth.tar'
-    RF_type = 'AR_ex'
     RF_module = RefineModule(refine_path, selector_path, search_factor=sr, input_sz=input_sz)
 
     # refine_method = args.refine_method

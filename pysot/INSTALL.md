@@ -14,17 +14,9 @@ This document contains detailed instructions for installing dependencies for PyS
 
 ## Step-by-step instructions
 
-#### Create environment and activate
+#### activate the environment of AlphaRefine
 ```bash
-conda create --name pysot python=3.7
-conda activate pysot
-```
-
-#### Install numpy/pytorch/opencv
-```
-conda install numpy
-conda install pytorch=0.4.1 torchvision cuda90 -c pytorch
-pip install opencv-python
+conda activate alpha
 ```
 
 #### Install other requirements
@@ -35,10 +27,4 @@ pip install pyyaml yacs tqdm colorama matplotlib cython tensorboardX
 #### Build extensions
 ```
 python setup.py build_ext --inplace
-```
-
-
-## Try with scripts
-```
-bash install.sh /path/to/your/conda pysot
 ```
