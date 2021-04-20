@@ -79,7 +79,7 @@ echo "****************** ECO Network ******************"
 gdown https://drive.google.com/uc\?id\=1aWC4waLv_te-BULoy0k-n_zS-ONms21S -O pytracking/networks/resnet18_vggmconv1.pth
 ```
 
-#### Other Base Trackers
+#### [Optional] Other Base Trackers
 Please refer to [pysot/README.md](pysot/README.md) for establishing SiamRPN++ and
 [RT_MDNet/README.md](RT_MDNet/README.md) for establishing RTMDNet.
 
