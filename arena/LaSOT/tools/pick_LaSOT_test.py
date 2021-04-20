@@ -3,7 +3,7 @@ import shutil
 
 '''从完整的LaSOT数据集中把280个测试集挑出来'''
 '''Pick 280 test sequences from the LaSOT '''
-LaSOT_root_dir = '../LaSOTBenchmark'
+LaSOT_root_dir = '/home/zxy/Downloads/AR_Data/LaSOTBenchmark'
 LaSOT_test_dir = '/home/zxy/Downloads/AR_Data/LaSOT_Test'
 if not os.path.exists(LaSOT_test_dir):
     os.mkdir(LaSOT_test_dir)

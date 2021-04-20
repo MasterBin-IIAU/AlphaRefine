@@ -12,7 +12,7 @@ This is the official implementation of [Alpha-Refine: Boosting Tracking Performa
 
 ## Getting Start
 
-#### Setting Up
+### Install AlphaRefine
   
 ```bash
 git clone https://github.com/MasterBin-IIAU/AlphaRefine.git
@@ -27,7 +27,7 @@ conda activate alpha
 python setup.py develop
 ```  
 
-#### Download AlphaRefine Models
+### Download AlphaRefine Models
 We provide the models of *AlphaRefine* here. The **AUC** and **Latency** are tested with SiamRPN++ as the base tracker
 on *LaSOT* dataset, using a RTX 2080Ti GPU.
 
@@ -53,10 +53,10 @@ More results are present in [Performance](#performance)
 | LTMU (CVPR20)             | 57.2  |  13 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2004.00305)/[Code](https://github.com/Daikenan/LTMU) |
 
 
-#### Establish Base Trackers
+### Establish Base Trackers
 In this project, we introduce DiMP50, DiMPsuper, ATOM, ECO, RTMDNet, SiamRPN++ as our base trackers.
 
-##### PyTracking Methods
+#### PyTracking Methods
 DiMP50, DiMPsuper, ATOM, ECO are trackers from [PyTracking](pytracking).
 
 The base tracker models trained using PyTracking can be download from [model zoo](https://github.com/visionml/pytracking/blob/master/MODEL_ZOO.md), download them into `pytracking/networks` 
@@ -79,40 +79,42 @@ echo "****************** ECO Network ******************"
 gdown https://drive.google.com/uc\?id\=1aWC4waLv_te-BULoy0k-n_zS-ONms21S -O pytracking/networks/resnet18_vggmconv1.pth
 ```
 
-##### Other Base Trackers
+#### Other Base Trackers
 Please refer to [pysot/README.md](pysot/README.md) for establishing SiamRPN++ and
 [RT_MDNet/README.md](RT_MDNet/README.md) for establishing RTMDNet.
 
 
-#### Run Evaluation Scripts
-
-* Before running the testing script, the path to the testing sets should be specified in `pytracking/evaluation/local.py`
-    
-    If `pytracking/evaluation/local.py` is not exist, please run
-    ```
-    python -c "from pytracking.evaluation.environment import create_default_local_file; create_default_local_file()"
-    ```
-    An example of `pytracking/evaluation/local.py.example`
+### Run Evaluation Scripts
 
 * We provide the evaluation recipes of [LaSOT](doc/arena/LaSOT.md) | [GOT-10K](doc/arena/GOT-10K.md) | 
 [TrackingNet](doc/arena/TrackingNet.md) | [VOT2020](doc/arena/VOT2020.md).
     You can follow these recipes to run the evaluation scripts.
 
+* For some of the testing scripts, the path to the testing sets should be specified in `pytracking/evaluation/local.py`
+    
+    If `pytracking/evaluation/local.py` is not exist, please run
+    ```
+    python -c "from pytracking.evaluation.environment import create_default_local_file; create_default_local_file()"
+    ```
+    An example of `pytracking/evaluation/local.py.example` is provided.
+
 ## Train
 
 The training code is based on [Pytracking](https://github.com/visionml/pytracking.git), thus the training operation is similar.
 
-#### Dataset
+### Dataset
 
 * Download the Dataset
-    [GOT-10K]() |
-    [LaSOT]() |
-    [COCO]() |
-    [ILSVRC-VID]() |
-    [ImageNet-DET]() |
-    [Youtube-VOS]() |
-    [ImageNet-DET]() |
-    [Saliency]() |
+    [GOT-10K](http://got-10k.aitestunion.com/downloads) |
+    [LaSOT](http://vision.cs.stonybrook.edu/~lasot/download.html) |
+    [MS-COCO](http://cocodataset.org/#home) |
+    [ILSVRC-VID](http://image-net.org/challenges/LSVRC/2017/) |
+    [ImageNet-DET](http://image-net.org/challenges/LSVRC/2017/) |
+    [YouTube-VOS](https://youtube-vos.org) |
+    [TrackingNet](https://tracking-net.org/), 
+    [Saliency](TODO)
+    
+    For more details, you can refer to [ltr/README.md](https://github.com/visionml/pytracking/tree/master/ltr#overview)
     
 
 * The path to the training sets should be specified in `ltr/admin/local.py`
@@ -123,14 +125,13 @@ The training code is based on [Pytracking](https://github.com/visionml/pytrackin
     ```
     An example `ltr/admin/local.py.example` is also provided.
     
-    
 
-#### Setting Up the Datasets
+### Setting Up the Datasets
 The training recipe are placed in `ltr/train_settings` (e.g. `ltr/train_settings/SEx_beta/SEcm_r34.py`), you can
 configure the *training parameters* and *Dataloaders*. The `path/to/data` should be specified in `ltr/admin/local.py` to make
 the *Dataloaders* find the data.
 
-#### Run Training Scripts
+### Run Training Scripts
 For the recipe `ltr/train_settings/$sub1/$sub2.py` run the following command to launch the training procedure.
 ```
 python -m torch.distributed.launch --nproc_per_node=8 \

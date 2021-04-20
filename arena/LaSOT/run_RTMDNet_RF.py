@@ -13,7 +13,6 @@ import numpy as np
 '''dataset'''
 from pysot.pysot.utils.bbox import get_axis_aligned_bbox
 from pysot.toolkit.datasets import DatasetFactory
-from pysot.toolkit.utils.region import vot_overlap, vot_float2str
 '''Tracker module'''
 from RT_MDNet.RT_MDNet import RT_MDNet
 '''Refine module'''

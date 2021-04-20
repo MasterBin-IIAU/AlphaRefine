@@ -13,7 +13,6 @@ import numpy as np
 
 from pysot.pysot.utils.bbox import get_axis_aligned_bbox
 from pysot.toolkit.datasets import DatasetFactory
-from pysot.toolkit.utils.region import vot_overlap, vot_float2str
 from pytracking.refine_modules.refine_module import RefineModule
 from pytracking.RF_utils import bbox_clip
 

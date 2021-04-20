@@ -18,7 +18,6 @@ from pysot.pysot.tracker.tracker_builder import build_tracker
 from pysot.pysot.utils.bbox import get_axis_aligned_bbox
 from pysot.pysot.utils.model_load import load_pretrain
 from pysot.toolkit.datasets import DatasetFactory
-from pysot.toolkit.utils.region import vot_overlap, vot_float2str
 
 '''RF utils'''
 from pytracking.RF_utils import bbox_clip
