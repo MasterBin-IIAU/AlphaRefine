@@ -133,7 +133,6 @@ configure the *training parameters* and *Dataloaders*.
 
 For a recipe named `ltr/train_settings/$sub1/$sub2.py`, run the following command to launch the training procedure.
 ```
-
 python -m torch.distributed.launch --nproc_per_node=8 \
         run_training_multigpu.py $sub1 $sub2 
 ```
