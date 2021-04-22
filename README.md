@@ -5,6 +5,7 @@ This is the official implementation of [Alpha-Refine: Boosting Tracking Performa
 ![Architecture](doc/asset/AR-Architecture.png)
 
 ## News
+- The code for **CVPR2021** is updated. The old version is still available by `git checkout vot2020`. 
 - AlphaRefine is accepted by the **CVPR2021**
 - :trophy: **Alpha-Refine wins VOT2020 Real-Time Challenge with EAOMultistart 0.499!** 
 - VOT2020 winner presentation [slide](VOT20-RT-Report.pdf) has been uploaded.**
@@ -167,6 +168,6 @@ For more performance reports, please refer to our [paper](https://arxiv.org/abs/
 
 ## Acknowledgments
 * This repo is based on [Pytracking](https://github.com/visionml/pytracking.git) which is an exellent work.
-* Thansk for [pysot](https://github.com/STVIR/pysot) and [RTMDNet](https://github.com/IlchaeJung/RT-MDNet) from which
+* Thanks for [pysot](https://github.com/STVIR/pysot) and [RTMDNet](https://github.com/IlchaeJung/RT-MDNet) from which
  we borrow the code as base trackers.
 
