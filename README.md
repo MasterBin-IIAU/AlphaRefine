@@ -5,6 +5,7 @@ This is the official implementation of [Alpha-Refine: Boosting Tracking Performa
 ![Architecture](doc/asset/AR-Architecture.png)
 
 ## News
+- A TensorRT optimized version of AlphaRefine is available [here](https://github.com/ymzis69/AlphaRefine_TensorRT).
 - The code for **CVPR2021** is updated. The old version is still available by `git checkout vot2020`. 
 - AlphaRefine is accepted by the **CVPR2021**
 - :trophy: **Alpha-Refine wins VOT2020 Real-Time Challenge with EAOMultistart 0.499!** 
