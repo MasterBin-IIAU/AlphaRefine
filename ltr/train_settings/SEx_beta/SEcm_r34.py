@@ -31,7 +31,7 @@ def run(settings):
     settings.scale_jitter_factor = {'train': 0, 'test': 0.25}
     settings.max_gap = 50
     settings.sample_per_epoch = 4000
-    settings.save_interval = 5
+    settings.save_interval = 5  # the interval of saving the checkpoints
 
     '''others'''
     settings.print_interval = 100  # How often to print loss and other info
