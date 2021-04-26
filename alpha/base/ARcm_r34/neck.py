@@ -1,4 +1,7 @@
-from ltr.models.neck.neck_utils import *
+import torch.nn as nn
+import torch
+from torch.nn import functional as F
+from ltr.models.neck.neck_utils import SEModule
 
 
 class PtCorr(nn.Module):

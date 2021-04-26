@@ -1,6 +1,4 @@
-import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 import ltr.models.backbone as backbones
 from .neck import PtCorr as Corr

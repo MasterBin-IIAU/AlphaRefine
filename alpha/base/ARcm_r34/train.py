@@ -8,7 +8,7 @@ from torch.utils.data.distributed import DistributedSampler
 from ltr.dataset.ardataset import Got10k, Lasot, MSCOCOSeq, ImagenetVID, ImagenetDET, Youtube_VOS, Saliency
 from ltr.data.ardata import SEprocessing, SEsampler, LTRLoader
 import ltr.data.ardata.transforms as dltransforms
-from ltr.trainers import LTRTrainer
+from ltr.trainers import ARTrainer
 
 from .actor import SEcm_Actor
 from .model import SEcm_resnet34 as SEx
@@ -113,7 +113,7 @@ def run(settings):
     lr_scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=8, gamma=0.5)
 
     # Create trainer
-    trainer = LTRTrainer(actor, [loader_train, loader_val], optimizer, settings, lr_scheduler)
+    trainer = ARTrainer(actor, [loader_train, loader_val], optimizer, settings, lr_scheduler)
 
     # load specified pre-trained parameter
     load_pretrained = False
