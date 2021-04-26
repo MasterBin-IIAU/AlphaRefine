@@ -10,6 +10,7 @@ from ltr.admin.environment import env_settings
 import glob
 from os.path import join
 
+
 def get_target_to_image_ratio(seq):
     anno = torch.Tensor(seq['anno'])
     img_sz = torch.Tensor(seq['image_size'])
@@ -28,7 +29,6 @@ def default_image_loader(path):
             print(e)
             return None
     return opencv_loader(path)
-
 
 
 class ImagenetDET(BaseDataset):
@@ -86,9 +86,8 @@ class ImagenetDET(BaseDataset):
         return len(self.sequence_list)
 
     def get_sequence_info(self, seq_id):
-        ''''''
-        '''根据seq_id得到被选中的视频的信息,其中visible属性最重要.它被用来判断当前视频是否可以拿来训练'''
-        bbox = torch.Tensor(self.sequence_list[seq_id]['anno']).view(1, 4) # torch tensor (1,4)
+        """ 根据seq_id得到被选中的视频的信息,其中visible属性最重要.它被用来判断当前视频是否可以拿来训练 """
+        bbox = torch.Tensor(self.sequence_list[seq_id]['anno']).view(1, 4)  # torch tensor (1,4)
         valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
         visible = valid.clone().byte()
         return {'bbox': bbox, 'valid': valid, 'visible': visible}
@@ -116,7 +115,6 @@ class ImagenetDET(BaseDataset):
         # object_meta = self.get_meta_info(seq_id)
 
         return frame_list, anno_frames, None
-
 
     def get_seqence_list(self, root):
         sequence_list = []
