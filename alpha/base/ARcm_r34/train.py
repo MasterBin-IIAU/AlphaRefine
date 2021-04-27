@@ -123,4 +123,4 @@ def run(settings):
     load_latest = not pretrained_loaded  # if the specified ckpt has been loaded, the latest ckpt will not be resumed.
 
     # launch training process
-    trainer.train(40, load_latest=not pretrained_loaded, fail_safe=False, save_interval=settings.save_interval)
+    trainer.train(40, load_latest=load_latest, fail_safe=False, save_interval=settings.save_interval)

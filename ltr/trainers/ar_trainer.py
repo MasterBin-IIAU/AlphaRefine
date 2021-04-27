@@ -158,6 +158,9 @@ class ARTrainer(LTRTrainer):
                     if self._checkpoint_dir:
                         if self.settings.local_rank == 0:
                             self.save_checkpoint(epoch, save_interval)
+                print('Finished training!')
+                return
+
             except:
                 print('Training crashed at epoch {}'.format(epoch))
                 if fail_safe:
@@ -168,6 +171,3 @@ class ARTrainer(LTRTrainer):
                     print('Restarting training from last epoch ...')
                 else:
                     raise
-
-        print('Finished training!')
-
