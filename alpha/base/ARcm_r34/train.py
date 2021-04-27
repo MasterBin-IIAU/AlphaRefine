@@ -116,10 +116,11 @@ def run(settings):
     trainer = ARTrainer(actor, [loader_train, loader_val], optimizer, settings, lr_scheduler)
 
     # load specified pre-trained parameter
-    load_pretrained = False
+    pretrained_loaded = False
     if hasattr(settings, 'pretrained') and settings.pretrained is not None:
         trainer.load_pretrained(settings.pretrained)
-        load_pretrained = True
+        pretrained_loaded = True
+    load_latest = not pretrained_loaded  # if the specified ckpt has been loaded, the latest ckpt will not be resumed.
 
     # launch training process
-    trainer.train(40, load_latest=not load_pretrained, fail_safe=False, save_interval=settings.save_interval)
+    trainer.train(40, load_latest=not pretrained_loaded, fail_safe=False, save_interval=settings.save_interval)
