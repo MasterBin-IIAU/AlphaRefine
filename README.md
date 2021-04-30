@@ -6,7 +6,9 @@ This is the official implementation of [Alpha-Refine: Boosting Tracking Performa
 
 ## News
 - A TensorRT optimized version of AlphaRefine is available [here](https://github.com/ymzis69/AlphaRefine_TensorRT).
-- The code for **CVPR2021** is updated. The old version is still available by `git checkout vot2020`. 
+- The code for **CVPR2021** is updated. The old version is still available by
+        
+        git clone -b vot2020 https://github.com/MasterBin-IIAU/AlphaRefine.git 
 - AlphaRefine is accepted by the **CVPR2021**
 - :trophy: **Alpha-Refine wins VOT2020 Real-Time Challenge with EAOMultistart 0.499!** 
 - VOT2020 winner presentation [slide](VOT20-RT-Report.pdf) has been uploaded.**
