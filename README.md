@@ -12,7 +12,7 @@ This is the official implementation of [Alpha-Refine: Boosting Tracking Performa
 - VOT2020 winner presentation [slide](VOT20-RT-Report.pdf) has been uploaded.**
 
 
-## Getting Start
+## Getting Start (Test)
 
 ### Install AlphaRefine
   
