@@ -15,7 +15,7 @@ This is the official implementation of [Alpha-Refine: Boosting Tracking Performa
 - VOT2020 winner presentation [slide](VOT20-RT-Report.pdf) has been uploaded.**
 
 
-## Setup and Test
+## Setup Alpha-Refine
 
 ### Install AlphaRefine
   
@@ -57,7 +57,10 @@ More results are present in [Performance](#performance)
 | PrDiMP50 (CVPR20)         | 59.8  |  30 (Unkown GPU)  |   [Paper](https://arxiv.org/pdf/2003.12565.pdf)/[Code](https://github.com/visionml/pytracking)  |
 | LTMU (CVPR20)             | 57.2  |  13 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2004.00305)/[Code](https://github.com/Daikenan/LTMU) |
 
+## Apply Alpha-Refine to Your Tracker
+TODO: a concise guidance for application is on its way, (will be update in two days).
 
+## Reproduce Our Experiment Results
 ### Establish Base Trackers
 In this project, we introduce DiMP50, DiMPsuper, ATOM, ECO, RTMDNet, SiamRPN++ as our base trackers.
 
