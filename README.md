@@ -19,7 +19,7 @@ This is the official implementation of [Alpha-Refine: Boosting Tracking Performa
 
 ## Setup Alpha-Refine
 
-### Install AlphaRefine
+* **Install AlphaRefine**
   
 ```bash
 git clone https://github.com/MasterBin-IIAU/AlphaRefine.git
@@ -34,7 +34,8 @@ conda activate alpha
 python setup.py develop
 ```  
 
-### Download AlphaRefine Models
+* **Download AlphaRefine Models**
+
 We provide the models of *AlphaRefine* here. The **AUC** and **Latency** are tested with SiamRPN++ as the base tracker
 on *LaSOT* dataset, using a RTX 2080Ti GPU.
 
@@ -48,7 +49,8 @@ We recommend download the model into `ltr/checkpoints/ltr/SEx_beta`.
 When combined with more powerful base trackers, *AlphaRefine* leads to very competitive tracking systems (e.g. *ARDiMP*). 
 Following are some of the best performed trackers on LaSOT. Results are present in [Performance](#performance)
 
-### Demo
+* **Demo**
+
 We provide a concise [demo.py](demo.py) as an example for applying alpha refine to dimp.
 **We recommend you should take this script as the starting point of exploring our project**.
 
