@@ -5,6 +5,8 @@ This is the official implementation of [Alpha-Refine: Boosting Tracking Performa
 ![Architecture](doc/asset/AR-Architecture.png)
 
 ## News
+- :warning: We provide a concise script [demo.py](demo.py) as an example of applying alpha refine to dimp. 
+**We recommend taking this script as the starting point of exploring our project**.
 - A TensorRT optimized version of AlphaRefine is available [here](https://github.com/ymzis69/AlphaRefine_TensorRT).
 - The code for **CVPR2021** is updated. The old version is still available by
         
@@ -12,7 +14,7 @@ This is the official implementation of [Alpha-Refine: Boosting Tracking Performa
         
 - AlphaRefine is accepted by the **CVPR2021**
 - :trophy: **Alpha-Refine wins VOT2020 Real-Time Challenge with EAOMultistart 0.499!** 
-- VOT2020 winner presentation [slide](VOT20-RT-Report.pdf) has been uploaded.**
+- VOT2020 winner presentation [slide](VOT20-RT-Report.pdf) has been uploaded.
 
 
 ## Setup Alpha-Refine
@@ -43,114 +45,28 @@ We recommend download the model into `ltr/checkpoints/ltr/SEx_beta`.
 | AR34<sub>c+m</sub> | ResNet34     |  5.1ms  |  55.9  |   [model](https://drive.google.com/file/d/1drLqNq4r9g4ZqGtOGuuLCmHJDh20Fu1m/view?usp=sharing)|
 | AR18<sub>c+m</sub> | ResNet18     |  4.2ms  |  55.0  |   [model](https://drive.google.com/file/d/1ANf0KCvlFBbGQPpvT-3WNiy414ANkgLZ/view?usp=sharing)|
 
-When combined with more powerful base trackers, 
-*AlphaRefine* leads to very competitive tracking systems (e.g. *ARDiMP*). 
-Following are some of the best performed trackers on LaSOT. 
-More results are present in [Performance](#performance)
+When combined with more powerful base trackers, *AlphaRefine* leads to very competitive tracking systems (e.g. *ARDiMP*). 
+Following are some of the best performed trackers on LaSOT. Results are present in [Performance](#performance)
 
-| Tracker                   | AUC(%)    | Speed (fps) | Paper/Code |
-|:-----------               |:----------------:|:----------------:|:----------------:|
-| ARDiMP (ours)             | 65.4  |  32 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/[Result](https://drive.google.com/file/d/1UNPwz7qP8SeBTxHF_Cw0JLmrN1jTqJJE/view?usp=sharing) |
-| Siam R-CNN (CVPR20)       | 64.8  |  5 (Tesla V100)   |   [Paper](https://arxiv.org/pdf/1911.12836.pdf)/[Code](https://github.com/VisualComputingInstitute/SiamR-CNN) |
-| DimpSuper                 | 63.1  |  39 (RTX 2080Ti)  |   [Paper](https://arxiv.org/pdf/2003.12565.pdf)/[Code](https://github.com/visionml/pytracking)  |
-| ARDiMP50 (ours)           | 60.2  |  46 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2012.06815)/[Result](https://drive.google.com/file/d/1wJc_-1lCxeGlqEAKd1qER1x_4bWAhujv/view?usp=sharing)  |
-| PrDiMP50 (CVPR20)         | 59.8  |  30 (Unkown GPU)  |   [Paper](https://arxiv.org/pdf/2003.12565.pdf)/[Code](https://github.com/visionml/pytracking)  |
-| LTMU (CVPR20)             | 57.2  |  13 (RTX 2080Ti)  |   [Paper](https://arxiv.org/abs/2004.00305)/[Code](https://github.com/Daikenan/LTMU) |
+### Demo
+We provide a concise [demo.py](demo.py) as an example for applying alpha refine to dimp.
+**We recommend you should take this script as the starting point of exploring our project**.
 
-## Apply Alpha-Refine to Your Tracker
-TODO: a concise guidance for application is on its way, (will be update in two days).
-
-## Reproduce Our Experiment Results
-### Establish Base Trackers
-In this project, we introduce DiMP50, DiMPsuper, ATOM, ECO, RTMDNet, SiamRPN++ as our base trackers.
-
-#### PyTracking Methods
-DiMP50, DiMPsuper, ATOM, ECO are trackers from [PyTracking](pytracking).
-
-The base tracker models trained using PyTracking can be download from [model zoo](https://github.com/visionml/pytracking/blob/master/MODEL_ZOO.md), download them into `pytracking/networks` 
-
-Or you can run the following script to download the models.
-
-```
-echo "****************** Downloading networks ******************"
-mkdir pytracking/networks
-
-echo "****************** DiMP Network ******************"
-gdown https://drive.google.com/uc\?id\=1qgachgqks2UGjKx-GdO1qylBDdB1f9KN -O pytracking/networks/dimp50.pth
-gdown https://drive.google.com/uc\?id\=1MAjrRJDCbL0DSjUKFyDkUuYS1-cYBNjk -O pytracking/networks/dimp18.pth
-gdown https://drive.google.com/open?id=1qDptswis2FxihLRYLVRGDvx6aUoAVVLv -O pytracking/networks/super_dimp.pth
-
-echo "****************** ATOM Network ******************"
-gdown https://drive.google.com/uc\?id\=1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU -O pytracking/networks/atom_default.pth
-
-echo "****************** ECO Network ******************"
-gdown https://drive.google.com/uc\?id\=1aWC4waLv_te-BULoy0k-n_zS-ONms21S -O pytracking/networks/resnet18_vggmconv1.pth
-```
-
-#### [Optional] Other Base Trackers
-Please refer to [external/pysot/README.md](external/pysot/README.md) for establishing SiamRPN++ and
-[external/RT_MDNet/README.md](external/RT_MDNet/README.md) for establishing RTMDNet.
+## How to apply Alpha-Refine to Your Own Tracker
+We provide a concise [demo.py](demo.py) as an example for applying alpha refine to dimp.
 
 
-### Run Evaluation Scripts
+## How to Train Alpha-Refine
+Please refer to [doc/TRAIN.md](doc/TRAIN.md) for the guidance of training Alpha-Refine.
 
-* We provide the evaluation recipes of [LaSOT](doc/arena/LaSOT.md) | [GOT-10K](doc/arena/GOT-10K.md) | 
-[TrackingNet](doc/arena/TrackingNet.md) | [VOT2020](doc/arena/VOT2020.md).
-    You can follow these recipes to run the evaluation scripts.
-
-* For some of the testing scripts, the path to the testing sets should be specified in `pytracking/evaluation/local.py`
-    
-    If `pytracking/evaluation/local.py` is not exist, please run
-    ```
-    python -c "from pytracking.evaluation.environment import create_default_local_file; create_default_local_file()"
-    ```
-    An example of `pytracking/evaluation/local.py.example` is provided.
-
-## Train
-
-The training code is based on [Pytracking](https://github.com/visionml/pytracking.git), thus the training operation is similar.
-
-### Dataset
-
-* Download the Dataset
-    [GOT-10K](http://got-10k.aitestunion.com/downloads) |
-    [LaSOT](http://vision.cs.stonybrook.edu/~lasot/download.html) |
-    [MS-COCO](http://cocodataset.org/#home) |
-    [ILSVRC-VID](http://image-net.org/challenges/LSVRC/2017/) |
-    [ImageNet-DET](http://image-net.org/challenges/LSVRC/2017/) |
-    [YouTube-VOS](https://youtube-vos.org) |
-    [Saliency](https://drive.google.com/file/d/1bvaJwL8n3xFC9s13KZLTV102pZLo1IT1/view?usp=sharing)
-    
-    For more details, you can refer to [ltr/README.md](https://github.com/visionml/pytracking/tree/master/ltr#overview)
-    
-
-* The path to the training sets should be specified in `ltr/admin/local.py`
-    
-    If the `ltr/admin/local.py` is not exist, please run 
-    ``` bash
-    python -c "from ltr.admin.environment import create_default_local_file; create_default_local_file()"
-    ```
-    An example `ltr/admin/local.py.example` is also provided.
-    
-
-### Run Training Scripts
-
-The training recipes are placed in `ltr/train_settings` (e.g. `ltr/train_settings/SEx_beta/SEcm_r34.py`), you can
-configure the *training parameters* and *Dataloaders*. 
-
-For a recipe named `ltr/train_settings/$sub1/$sub2.py`, run the following command to launch the training procedure.
-```
-python -m torch.distributed.launch --nproc_per_node=8 \
-        run_training_multigpu.py $sub1 $sub2 
-```
-The checkpoints will be saved in `AlphaRefine/checkpoints/ltr/$sub1/$sub2/SEcmnet_ep00*.pth.tar`.
-
+After training, you can refer to [doc/Reproduce.md](doc/Reproduce.md) for reproducing our experiment result.
 
 ## Performance
 
 When combined with more powerful base trackers, 
 *AlphaRefine* leads to very competitive tracking systems (e.g. *ARDiMP*).
-For more performance reports, please refer to our [paper](https://arxiv.org/abs/2012.06815)
+For more performance reports, please refer to our [paper](https://arxiv.org/abs/2012.06815).
+**You can refer to [doc/Reproduce.md](doc/Reproduce.md) for reproducing our result.**
 
 * **LaSOT**
 

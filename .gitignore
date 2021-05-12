@@ -6,6 +6,7 @@ local.py
 log*.txt
 pytracking/pytracking.egg-info/
 pytracking/pytracking
+pytracking/networks
 *.egg*
 *.pyc
 tensorboard/
