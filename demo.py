@@ -156,11 +156,15 @@ def demo(base_path, ar_path, data_dir):
 
 
 if __name__ == '__main__':
-    # path to video sequence
-    data_dir = '/home/zxy/Desktop/VOT_RGBD/data/RGBD19/box_room_occ_1'
-    # path to model_file of base tracker
+    # path to video sequence - any directory with series of images will be OK
+    data_dir = 'data/RGBD19/box_room_occ_1'
+
+    # path to model_file of base tracker - model can be download from:
+    # https://drive.google.com/open?id=1qDptswis2FxihLRYLVRGDvx6aUoAVVLv
     base_path = '/home/zxy/Desktop/AR_Maintaince/AlphaRefine/pytracking/networks/super_dimp.pth.tar'
-    # path to model_file of Alpha-Refine
+
+    # path to model_file of Alpha-Refine - the model can be download from
+    # https://drive.google.com/file/d/1drLqNq4r9g4ZqGtOGuuLCmHJDh20Fu1m/view
     ar_path = '/home/zxy/Desktop/AR_Maintaince/AlphaRefine/ltr/checkpoints/ltr/SEx_beta/SEcmnet_ep0040-c.pth.tar'
 
     demo(base_path, ar_path, data_dir)
