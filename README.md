@@ -43,8 +43,8 @@ We recommend download the model into `ltr/checkpoints/ltr/SEx_beta`.
 
 | Tracker        | Backbone         | Latency     | AUC(%)   |  Model  |
 |:--------------:|:----------------:|:-----------:|:-----------:|:----------------:|
-| AR34<sub>c+m</sub> | ResNet34     |  5.1ms  |  55.9  |   [model](https://drive.google.com/file/d/1drLqNq4r9g4ZqGtOGuuLCmHJDh20Fu1m/view?usp=sharing)|
-| AR18<sub>c+m</sub> | ResNet18     |  4.2ms  |  55.0  |   [model](https://drive.google.com/file/d/1ANf0KCvlFBbGQPpvT-3WNiy414ANkgLZ/view?usp=sharing)|
+| AR34<sub>c+m</sub> | ResNet34     |  5.1ms  |  55.9  |   [google](https://drive.google.com/file/d/1drLqNq4r9g4ZqGtOGuuLCmHJDh20Fu1m/view?usp=sharing)/[baidu](https://pan.baidu.com/s/1ZCJKk1mXE_96BEpwGiEuMQ)[key:83ef]|
+| AR18<sub>c+m</sub> | ResNet18     |  4.2ms  |  55.0  |   [google](https://drive.google.com/file/d/1ANf0KCvlFBbGQPpvT-3WNiy414ANkgLZ/view?usp=sharing)/[baidu](https://pan.baidu.com/s/1IIaRNkFVPSG1s71g255CHw)[key:jl1m]|
 
 When combined with more powerful base trackers, *AlphaRefine* leads to very competitive tracking systems (e.g. *ARDiMP*). 
 Following are some of the best performed trackers on LaSOT. Results are present in [Performance](#performance)
