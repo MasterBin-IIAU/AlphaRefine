@@ -53,7 +53,7 @@ Following are some of the best performed trackers on LaSOT. Results are present 
 
 We provide a concise [demo.py](demo.py) as an example for applying alpha refine to dimp.
 **We recommend you should take this script as the starting point of exploring our project**.
-You may need doc/Reproduce.md for setting up the base trackers of our experiments.
+You may need  [doc/Reproduce.md](doc/Reproduce.md) for setting up the base trackers of our experiments.
 
 ## How to apply Alpha-Refine to Your Own Tracker
 We provide a concise [demo.py](demo.py) as an example for applying alpha refine to dimp.
