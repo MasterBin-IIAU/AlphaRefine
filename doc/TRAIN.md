@@ -10,7 +10,7 @@ The training code is based on [Pytracking](https://github.com/visionml/pytrackin
     [ILSVRC-VID](http://image-net.org/challenges/LSVRC/2017/) |
     [ImageNet-DET](http://image-net.org/challenges/LSVRC/2017/) |
     [YouTube-VOS](https://youtube-vos.org) |
-    [Saliency](https://drive.google.com/file/d/1bvaJwL8n3xFC9s13KZLTV102pZLo1IT1/view?usp=sharing)
+    [Saliency](https://drive.google.com/file/d/1XykS4zJl249PuyKu7aHshB5d6Y-F2k0p/view)
     
     For more details, you can refer to [ltr/README.md](https://github.com/visionml/pytracking/tree/master/ltr#overview)
     
