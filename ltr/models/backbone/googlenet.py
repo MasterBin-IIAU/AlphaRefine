@@ -7,7 +7,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.jit.annotations import Optional, Tuple
 from torch import Tensor
-from torchvision.models.utils import load_state_dict_from_url
+#from torchvision.models.utils import load_state_dict_from_url
+from torch.hub import load_state_dict_from_url
 
 __all__ = ['GoogLeNet', 'googlenet', "GoogLeNetOutputs", "_GoogLeNetOutputs"]
 

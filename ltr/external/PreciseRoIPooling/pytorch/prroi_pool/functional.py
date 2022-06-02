@@ -21,6 +21,12 @@ _prroi_pooling = None
 def _import_prroi_pooling():
     global _prroi_pooling
 
+    #load the prroi_pool module
+    import imp
+    file, path, description = imp.find_module('prroi_pool')
+    with file:
+        _prroi_pooling = imp.load_module('prroi_pool', file, path, description)
+    
     if _prroi_pooling is None:
         try:
             from os.path import join as pjoin, dirname
@@ -29,7 +35,7 @@ def _import_prroi_pooling():
 
             _prroi_pooling = load_extension(
                 '_prroi_pooling',
-                [pjoin(root_dir, 'prroi_pooling_gpu.c'), pjoin(root_dir, 'prroi_pooling_gpu_impl.cu')],
+                [pjoin(root_dir, 'prroi_pooling_gpu.cpp'), pjoin(root_dir, 'prroi_pooling_gpu_impl.cu')],
                 verbose=True
             )
         except ImportError:

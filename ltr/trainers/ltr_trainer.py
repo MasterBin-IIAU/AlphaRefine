@@ -43,12 +43,11 @@ class LTRTrainer(BaseTrainer):
 
     def cycle_dataset(self, loader):
         """Do a cycle of training or validation."""
-
+        print('len of loader in cycle_dataset = ' + str(loader.__len__()))
         self.actor.train(loader.training)
         torch.set_grad_enabled(loader.training)
 
         self._init_timing()
-
         for i, data in enumerate(loader, 1):
             # get inputs
             if self.move_data_to_gpu:
@@ -71,12 +70,13 @@ class LTRTrainer(BaseTrainer):
             self._update_stats(stats, batch_size, loader)
 
             # print statistics
-            if self.settings.local_rank == 0:
+            if self.settings.local_rank in [-1, 0]:
                 self._print_stats(i, loader, batch_size)
 
     def train_epoch(self):
         """Do one epoch for each loader."""
         for loader in self.loaders:
+            print('loader = ' + str(loader))
             if self.epoch % loader.epoch_interval == 0:
                 self.cycle_dataset(loader)
 

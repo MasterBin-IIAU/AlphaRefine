@@ -19,7 +19,7 @@ def run(settings):
     # Most common settings are assigned in the settings struct
     settings.description = 'Settings of SEcm module'
     '''!!! some important hyperparameters !!!'''
-    settings.batch_size = 32  # Batch size
+    settings.batch_size = 4  # Batch size
     settings.search_area_factor = 2.0  # Image patch size relative to target size
     settings.feature_sz = 16  # Size of feature map
     settings.output_sz = settings.feature_sz * 16  # Size of input image patches
@@ -56,6 +56,7 @@ def run(settings):
     # Train datasets
     # -bbox and corner datasets
     got_10k_train = Got10k(settings.env.got10k_dir, split='train')
+    '''
     lasot_train = Lasot(split='train')
     coco_train = MSCOCOSeq()
     imagenet_vid = ImagenetVID()
@@ -64,15 +65,21 @@ def run(settings):
     # -mask datasets
     youtube_vos = Youtube_VOS()
     saliency = Saliency()
-
+    '''
     # The sampler for training
     '''Build training dataset. focus on "__getitem__" and "__len__"'''
+    '''
     dataset_train = SEsampler.SEMaskSampler([lasot_train,got_10k_train,coco_train,imagenet_vid,imagenet_det,youtube_vos,saliency],
                                         [1,1,1,1,1,2,3],
                                         samples_per_epoch= settings.sample_per_epoch * settings.batch_size,
                                         max_gap=settings.max_gap,
                                         processing=data_processing_train)
-
+    '''
+    dataset_train = SEsampler.SEMaskSampler([got_10k_train],
+                                        [1],
+                                        samples_per_epoch= settings.sample_per_epoch * settings.batch_size,
+                                        max_gap=settings.max_gap,
+                                        processing=data_processing_train)
     # The loader for training
     '''using distributed sampler'''
     train_sampler = DistributedSampler(dataset_train)
@@ -82,7 +89,8 @@ def run(settings):
 
 
     '''2. build validation dataset and dataloader'''
-    lasot_test = Lasot(split='test')
+    #lasot_test = Lasot(split='test')
+    lasot_test = Got10k(settings.env.got10k_dir, split='val')
     # The augmentation transform applied to the validation set (individually to each image in the pair)
     transform_val = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),
                                                     torchvision.transforms.Normalize(mean=settings.normalize_mean, std=settings.normalize_std)])

@@ -30,9 +30,8 @@ class BaseTrainer:
         self.stats = {}
 
         self.device = getattr(settings, 'device', None)
-        if self.device is None:
+        if self.device is None or self.device in [-1, 0]:
             self.device = torch.device("cuda:0" if torch.cuda.is_available() and settings.use_gpu else "cpu")
-
         self.actor.to(self.device)
 
     def update_settings(self, settings=None):
@@ -48,7 +47,7 @@ class BaseTrainer:
         else:
             self._checkpoint_dir = None
 
-    def train(self, max_epochs, load_latest=False, fail_safe=True, save_interval=5):
+    def train(self, max_epochs, load_latest=False, fail_safe=True, save_interval=1):
         """Do training for the given number of epochs.
         args:
             max_epochs - Max number of training epochs,
@@ -57,7 +56,7 @@ class BaseTrainer:
         """
 
         epoch = -1
-        num_tries = 10
+        num_tries = 1
         for i in range(num_tries):
             try:
                 if load_latest:
@@ -72,7 +71,7 @@ class BaseTrainer:
                         self.lr_scheduler.step()
 
                     if self._checkpoint_dir:
-                        if self.settings.local_rank == 0 and (epoch % save_interval) == 0:
+                        if self.settings.local_rank in [-1, 0] and (epoch % save_interval) == 0:
                             self.save_checkpoint()
             except:
                 print('Training crashed at epoch {}'.format(epoch))
@@ -92,7 +91,8 @@ class BaseTrainer:
 
     def save_checkpoint(self):
         """Saves a checkpoint of the network and other variables."""
-
+        print("saving checpoint")
+        print("checkpoint_dir = " + self._checkpoint_dir)
         net = self.actor.net.module if multigpu.is_multi_gpu(self.actor.net) else self.actor.net
 
         actor_type = type(self.actor).__name__

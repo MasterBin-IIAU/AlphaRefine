@@ -1,5 +1,6 @@
-from .lasot import Lasot
+#from .lasot import Lasot
 from .got10k import Got10k
+'''
 from .tracking_net import TrackingNet
 from .imagenetvid import ImagenetVID
 from .coco import MSCOCO
@@ -17,3 +18,4 @@ from .synthetic_video_blend import SyntheticVideoBlend
 from .imagenetdet import ImagenetDET
 from .youtube_vos import Youtube_VOS
 from .saliency import Saliency
+'''

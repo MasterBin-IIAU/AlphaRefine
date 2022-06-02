@@ -1,5 +1,6 @@
 import torch.optim as optim
-from ltr.dataset import Lasot, Got10k, TrackingNet, MSCOCOSeq
+#from ltr.dataset import Lasot, Got10k, TrackingNet, MSCOCOSeq
+from ltr.dataset import Got10k
 from ltr.data import processing, sampler, LTRLoader
 from ltr.models.tracking import dimpnet
 import ltr.models.loss as ltr_losses
@@ -14,10 +15,10 @@ def run(settings):
     settings.description = 'SuperDiMP: Combines the DiMP classifier with the PrDiMP bounding box regressor and better' \
                            'training settings (larger batch size, inside_major cropping, and flipping augmentation.' \
                            'Gives results significantly better than both DiMP-50 and PrDiMP-50.'
-    settings.batch_size = 20
+    settings.batch_size = 4
     settings.num_workers = 8
     settings.multi_gpu = False
-    settings.print_interval = 1
+    settings.print_interval = 100
     settings.normalize_mean = [0.485, 0.456, 0.406]
     settings.normalize_std = [0.229, 0.224, 0.225]
     settings.search_area_factor = 6.0
@@ -31,13 +32,14 @@ def run(settings):
     # settings.print_stats = ['Loss/total', 'Loss/iou', 'ClfTrain/init_loss', 'ClfTrain/test_loss']
 
     # Train datasets
-    lasot_train = Lasot(settings.env.lasot_dir, split='train')
-    got10k_train = Got10k(settings.env.got10k_dir, split='vottrain')
+    #lasot_train = Lasot(settings.env.lasot_dir, split='train')
+    got10k_train = Got10k(settings.env.got10k_dir, split='train')
+    '''
     trackingnet_train = TrackingNet(settings.env.trackingnet_dir, set_ids=list(range(4)))
     coco_train = MSCOCOSeq(settings.env.coco_dir)
-
+    '''
     # Validation datasets
-    got10k_val = Got10k(settings.env.got10k_dir, split='votval')
+    got10k_val = Got10k(settings.env.got10k_dir, split='val')
 
 
     # Data transform
@@ -84,20 +86,24 @@ def run(settings):
                                                       joint_transform=transform_joint)
 
     # Train sampler and loader
+    '''
     dataset_train = sampler.DiMPSampler([lasot_train, got10k_train, trackingnet_train, coco_train], [1,1,1,1],
                                         samples_per_epoch=40000, max_gap=200, num_test_frames=3, num_train_frames=3,
                                         processing=data_processing_train)
-
+    '''
+    dataset_train = sampler.DiMPSampler([got10k_train], [1],
+                                        samples_per_epoch=39430, max_gap=200, num_test_frames=3, num_train_frames=3,
+                                        processing=data_processing_train)
     loader_train = LTRLoader('train', dataset_train, training=True, batch_size=settings.batch_size, num_workers=settings.num_workers,
                              shuffle=True, drop_last=True, stack_dim=1)
 
     # Validation samplers and loaders
-    dataset_val = sampler.DiMPSampler([got10k_val], [1], samples_per_epoch=10000, max_gap=200,
+    dataset_val = sampler.DiMPSampler([got10k_val], [1], samples_per_epoch=9290, max_gap=200,
                                       num_test_frames=3, num_train_frames=3,
                                       processing=data_processing_val)
 
     loader_val = LTRLoader('val', dataset_val, training=False, batch_size=settings.batch_size, num_workers=settings.num_workers,
-                           shuffle=False, drop_last=True, epoch_interval=5, stack_dim=1)
+                           shuffle=False, drop_last=True, epoch_interval=1, stack_dim=1)
 
     # Create network and actor
     net = dimpnet.dimpnet50(filter_size=settings.target_filter_sz, backbone_pretrained=True, optim_iter=5,
@@ -129,4 +135,4 @@ def run(settings):
 
     trainer = LTRTrainer(actor, [loader_train, loader_val], optimizer, settings, lr_scheduler)
 
-    trainer.train(50, load_latest=True, fail_safe=True)
+    trainer.train(8, load_latest=True, fail_safe=True)

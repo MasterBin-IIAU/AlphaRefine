@@ -29,7 +29,7 @@ def run_training(train_module, train_name, cudnn_benchmark=True, local_rank=-1, 
     settings.local_rank = local_rank
     settings.device = local_rank
     settings.pretrained = pretrained
-
+    
     expr_module = importlib.import_module('ltr.train_settings.{}.{}'.format(train_module, train_name))
     expr_func = getattr(expr_module, 'run')
     expr_func(settings)
@@ -42,7 +42,7 @@ def main():
 
     parser.add_argument('--cudnn_benchmark', type=bool, default=True, help='Set cudnn benchmark on (1) or off (0) (default is on).')
     '''for multi-gpu training'''
-    parser.add_argument('--local_rank', default=1, type=int,
+    parser.add_argument('--local_rank', default=-1, type=int,
                     help='node rank for distributed training')
     parser.add_argument('--pretrained', default=None, help='path to pretrained model')
 
@@ -54,9 +54,14 @@ def main():
     os.environ['WORLD_SIZE'] = '1'
     os.environ['MASTER_ADDR'] = '127.0.0.1'
     os.environ['MASTER_PORT'] = '29500'
-    dist.init_process_group(backend='nccl')
-    torch.cuda.set_device(args.local_rank)
-
+    available_gpus = [torch.cuda.device(i) for i in range(torch.cuda.device_count())]
+    print(available_gpus)
+    if args.local_rank != -1:
+        dist.init_process_group(backend='gloo')
+        torch.cuda.set_device(args.local_rank)
+    else:
+        torch.cuda.set_device(0)
+    
     run_training(args.train_module, args.train_name, args.cudnn_benchmark, args.local_rank, args.pretrained)
 
 

@@ -55,7 +55,7 @@ def main():
 
     '''for multi-gpu training'''
     print('local rank: ', args.local_rank)
-    dist.init_process_group(backend='nccl')
+    dist.init_process_group(backend='gloo')
     torch.cuda.set_device(args.local_rank)
 
     run_training(args.train_module, args.train_name, args.cudnn_benchmark, args.local_rank, args.pretrained)
