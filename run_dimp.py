@@ -15,7 +15,8 @@ import torch.nn.functional as F
 import torch.nn as nn
 import cv2
 
-#pytracking/RF_utils
+
+# pytracking/RF_utils
 def bbox_clip(x1, y1, x2, y2, boundary, min_sz=10):
     '''boundary (H,W)'''
     x1_new = max(0, min(x1, boundary[1] - min_sz))
@@ -23,9 +24,11 @@ def bbox_clip(x1, y1, x2, y2, boundary, min_sz=10):
     x2_new = max(min_sz, min(x2, boundary[1]))
     y2_new = max(min_sz, min(y2, boundary[0]))
     return x1_new, y1_new, x2_new, y2_new
+
+
 ####
 
-#pytracking/refine_modules/utils
+# pytracking/refine_modules/utils
 def mask2bbox(mask, ori_bbox, MASK_THRESHOLD=0.5):
     target_mask = (mask > MASK_THRESHOLD)
     target_mask = target_mask.astype(np.uint8)
@@ -46,6 +49,7 @@ def mask2bbox(mask, ori_bbox, MASK_THRESHOLD=0.5):
         prbox = ori_bbox
     return np.array(prbox).astype(np.float)
 
+
 def delta2bbox(delta):
     bbox_cxcywh = delta.clone()
     '''based on (128,128) center region'''
@@ -54,12 +58,14 @@ def delta2bbox(delta):
     bbox_xywh = bbox_cxcywh.clone()
     bbox_xywh[:, :2] = bbox_cxcywh[:, :2] - 0.5 * bbox_cxcywh[:, 2:]
     return bbox_xywh
+
+
 ####
 
-#pytracking/refine_modules/refine_module
+# pytracking/refine_modules/refine_module
 class RefineModule(object):
     def __init__(self, refine_net_dir, selector=None, search_factor=2.0, input_sz=256):
-        #print('refine_net_dir = ' + refine_net_dir)
+        # print('refine_net_dir = ' + refine_net_dir)
         self.refine_network = self.get_network(refine_net_dir)
         assert isinstance(selector, (int, str))
         self.branch_selector = selector if isinstance(selector, int) else self.get_network(selector)
@@ -165,7 +171,6 @@ class RefineModule(object):
         """ Step2: forward prop (test branch) """
         output_dict = {}
         with torch.no_grad():
-
             output = self.refine_network.forward_test(Cpatch_tensor, mode='test', branches=['mask'])  # (1,1,H,W)
 
             assert 'mask' in output
@@ -208,8 +213,8 @@ class RefineModule(object):
         """
         x1_c, y1_c, w_c, h_c = bbox_crop.tolist()
         x1_o, y1_o, w_o, h_o = bbox_ori.tolist()
-        x1_oo = x1_o - (self.search_factor-1)/2 * w_o
-        y1_oo = y1_o - (self.search_factor-1)/2 * h_o
+        x1_oo = x1_o - (self.search_factor - 1) / 2 * w_o
+        y1_oo = y1_o - (self.search_factor - 1) / 2 * h_o
         delta_x1 = x1_c / w_f
         delta_y1 = y1_c / h_f
         delta_w = w_c / w_f
@@ -218,8 +223,8 @@ class RefineModule(object):
                          delta_w, delta_h])
 
     def get_network(self, checkpoint_dir):
-        #print('refine network load')
-        #print('checkpoint_dir = ' + checkpoint_dir)
+        # print('refine network load')
+        # print('checkpoint_dir = ' + checkpoint_dir)
         network, _ = load_network(checkpoint_dir)
         network.cuda()
         network.eval()
@@ -246,9 +251,11 @@ class RefineModule(object):
             `torch.Tensor` (4,)
         """
         return torch.from_numpy(gt_arr.astype(np.float32))
+
+
 ####
 
-#ltr/data/processing_utils_SE
+# ltr/data/processing_utils_SE
 def sample_target_SE(im, target_bb, search_area_factor, output_sz=None, mode=cv2.BORDER_REPLICATE):
     """ Extracts a crop centered at target_bb box, of size search_area_factor times target_bb(Both height and width)
 
@@ -272,20 +279,20 @@ def sample_target_SE(im, target_bb, search_area_factor, output_sz=None, mode=cv2
     if ws < 1 or hs < 1:
         raise Exception('Too small bounding box.')
 
-    x1 = round(x + 0.5*w - ws*0.5)
+    x1 = round(x + 0.5 * w - ws * 0.5)
     x2 = x1 + ws
 
     y1 = round(y + 0.5 * h - hs * 0.5)
     y2 = y1 + hs
 
     x1_pad = max(0, -x1)
-    x2_pad = max(x2-im.shape[1]+1, 0)
+    x2_pad = max(x2 - im.shape[1] + 1, 0)
 
     y1_pad = max(0, -y1)
-    y2_pad = max(y2-im.shape[0]+1, 0)
+    y2_pad = max(y2 - im.shape[0] + 1, 0)
 
     # Crop target
-    im_crop = im[y1+y1_pad:y2-y2_pad, x1+x1_pad:x2-x2_pad, :]
+    im_crop = im[y1 + y1_pad:y2 - y2_pad, x1 + x1_pad:x2 - x2_pad, :]
 
     # Pad
     im_crop_padded = cv2.copyMakeBorder(im_crop, y1_pad, y2_pad, x1_pad, x2_pad, mode)
@@ -294,12 +301,16 @@ def sample_target_SE(im, target_bb, search_area_factor, output_sz=None, mode=cv2
         w_rsz_f = output_sz / ws
         h_rsz_f = output_sz / hs
         im_crop_padded_rsz = cv2.resize(im_crop_padded, (output_sz, output_sz))
-        if len(im_crop_padded_rsz.shape)==2:
-            im_crop_padded_rsz = im_crop_padded_rsz[...,np.newaxis]
+        if len(im_crop_padded_rsz.shape) == 2:
+            im_crop_padded_rsz = im_crop_padded_rsz[..., np.newaxis]
         return im_crop_padded_rsz, h_rsz_f, w_rsz_f
     else:
         return im_crop_padded, 1.0, 1.0
+
+
 '''把mask映射到原图上'''
+
+
 def map_mask_back(im, target_bb, search_area_factor, mask, mode=cv2.BORDER_REPLICATE):
     """ Extracts a crop centered at target_bb box, of size search_area_factor times target_bb(Both height and width)
 
@@ -313,8 +324,8 @@ def map_mask_back(im, target_bb, search_area_factor, mask, mode=cv2.BORDER_REPLI
         cv image - extracted crop
         float - the factor by which the crop has been resized to make the crop size equal output_size
     """
-    H,W = (im.shape[0],im.shape[1])
-    base = np.zeros((H,W))
+    H, W = (im.shape[0], im.shape[1])
+    base = np.zeros((H, W))
     x, y, w, h = target_bb.tolist()
 
     # Crop image
@@ -324,32 +335,36 @@ def map_mask_back(im, target_bb, search_area_factor, mask, mode=cv2.BORDER_REPLI
     if ws < 1 or hs < 1:
         raise Exception('Too small bounding box.')
 
-    x1 = round(x + 0.5*w - ws*0.5)
+    x1 = round(x + 0.5 * w - ws * 0.5)
     x2 = x1 + ws
 
     y1 = round(y + 0.5 * h - hs * 0.5)
     y2 = y1 + hs
 
     x1_pad = max(0, -x1)
-    x2_pad = max(x2-im.shape[1]+1, 0)
+    x2_pad = max(x2 - im.shape[1] + 1, 0)
 
     y1_pad = max(0, -y1)
-    y2_pad = max(y2-im.shape[0]+1, 0)
+    y2_pad = max(y2 - im.shape[0] + 1, 0)
 
     '''pad base'''
     base_padded = cv2.copyMakeBorder(base, y1_pad, y2_pad, x1_pad, x2_pad, mode)
     '''Resize mask'''
-    mask_rsz = cv2.resize(mask,(ws,hs))
+    mask_rsz = cv2.resize(mask, (ws, hs))
     '''fill region with mask'''
-    base_padded[y1+y1_pad:y2+y1_pad, x1+x1_pad:x2+x1_pad] = mask_rsz.copy()
+    base_padded[y1 + y1_pad:y2 + y1_pad, x1 + x1_pad:x2 + x1_pad] = mask_rsz.copy()
     '''crop base_padded to get final mask'''
-    final_mask = base_padded[y1_pad:y1_pad+H,x1_pad:x1_pad+W]
-    assert (final_mask.shape == (H,W))
+    final_mask = base_padded[y1_pad:y1_pad + H, x1_pad:x1_pad + W]
+    assert (final_mask.shape == (H, W))
     return final_mask
 
+
 '''Added on 2019.12.23'''
-def transform_image_to_crop_SE(box_in: torch.Tensor, box_extract: torch.Tensor, resize_factor_h: float, resize_factor_w: float,
-                            crop_sz: torch.Tensor) -> torch.Tensor:
+
+
+def transform_image_to_crop_SE(box_in: torch.Tensor, box_extract: torch.Tensor, resize_factor_h: float,
+                               resize_factor_w: float,
+                               crop_sz: torch.Tensor) -> torch.Tensor:
     """ Transform the box co-ordinates from the original image co-ordinates to the co-ordinates of the cropped image
     args:
         box_in - the box for which the co-ordinates are to be transformed
@@ -360,28 +375,30 @@ def transform_image_to_crop_SE(box_in: torch.Tensor, box_extract: torch.Tensor, 
     returns:
         torch.Tensor - transformed co-ordinates of box_in
     """
-    box_extract_center = box_extract[0:2] + 0.5*box_extract[2:4]
+    box_extract_center = box_extract[0:2] + 0.5 * box_extract[2:4]
 
-    box_in_center = box_in[0:2] + 0.5*box_in[2:4]
+    box_in_center = box_in[0:2] + 0.5 * box_in[2:4]
 
-    box_out_xc = (crop_sz[0] -1)/2 + (box_in_center[0] - box_extract_center[0])*resize_factor_w
-    box_out_yc = (crop_sz[0] -1)/2 + (box_in_center[1] - box_extract_center[1])*resize_factor_h
+    box_out_xc = (crop_sz[0] - 1) / 2 + (box_in_center[0] - box_extract_center[0]) * resize_factor_w
+    box_out_yc = (crop_sz[0] - 1) / 2 + (box_in_center[1] - box_extract_center[1]) * resize_factor_h
     box_out_w = box_in[2] * resize_factor_w
     box_out_h = box_in[3] * resize_factor_h
 
     '''2019.12.28 为了避免出现(x1,y1)小于0,或者(x2,y2)大于256的情况,这里我对它们加上了一些限制'''
     max_sz = crop_sz[0].item()
-    box_out_x1 = torch.clamp(box_out_xc - 0.5 * box_out_w,0,max_sz)
-    box_out_y1 = torch.clamp(box_out_yc - 0.5 * box_out_h,0,max_sz)
-    box_out_x2 = torch.clamp(box_out_xc + 0.5 * box_out_w,0,max_sz)
-    box_out_y2 = torch.clamp(box_out_yc + 0.5 * box_out_h,0,max_sz)
+    box_out_x1 = torch.clamp(box_out_xc - 0.5 * box_out_w, 0, max_sz)
+    box_out_y1 = torch.clamp(box_out_yc - 0.5 * box_out_h, 0, max_sz)
+    box_out_x2 = torch.clamp(box_out_xc + 0.5 * box_out_w, 0, max_sz)
+    box_out_y2 = torch.clamp(box_out_yc + 0.5 * box_out_h, 0, max_sz)
     box_out_w_new = box_out_x2 - box_out_x1
     box_out_h_new = box_out_y2 - box_out_y1
     box_out = torch.stack((box_out_x1, box_out_y1, box_out_w_new, box_out_h_new))
     return box_out
+
+
 ####
 
-#bounding_box_utils
+# bounding_box_utils
 def rect_to_rel(bb, sz_norm=None):
     """Convert standard rectangular parametrization of the bounding box [x, y, w, h]
     to relative parametrization [cx/sw, cy/sh, log(w), log(h)], where [cx, cy] is the center coordinate.
@@ -390,27 +407,30 @@ def rect_to_rel(bb, sz_norm=None):
         sz_norm  -  [N] x 2 tensor of value of [sw, sh] (optional). sw=w and sh=h if not given.
     """
 
-    c = bb[...,:2] + 0.5 * bb[...,2:]
+    c = bb[..., :2] + 0.5 * bb[..., 2:]
     if sz_norm is None:
-        c_rel = c / bb[...,2:]
+        c_rel = c / bb[..., 2:]
     else:
         c_rel = c / sz_norm
-    sz_rel = torch.log(bb[...,2:])
+    sz_rel = torch.log(bb[..., 2:])
     return torch.cat((c_rel, sz_rel), dim=-1)
+
 
 def rel_to_rect(bb, sz_norm=None):
     """Inverts the effect of rect_to_rel. See above."""
 
-    sz = torch.exp(bb[...,2:])
+    sz = torch.exp(bb[..., 2:])
     if sz_norm is None:
-        c = bb[...,:2] * sz
+        c = bb[..., :2] * sz
     else:
-        c = bb[...,:2] * sz_norm
+        c = bb[..., :2] * sz_norm
     tl = c - 0.5 * sz
     return torch.cat((tl, sz), dim=-1)
+
+
 #####
 
-#ltr/models/target_classifier/initializer
+# ltr/models/target_classifier/initializer
 class FilterInitializerZero(nn.Module):
     """Initializes a target classification filter with zeros.
     args:
@@ -434,33 +454,42 @@ class FilterInitializerZero(nn.Module):
         num_sequences = feat.shape[1] if feat.dim() == 5 else 1
 
         return feat.new_zeros(num_sequences, self.filter_size[0], self.filter_size[1], self.filter_size[2])
+
+
 ####
 
-#dcf module
+# dcf module
 def max2d(a: torch.Tensor) -> (torch.Tensor, torch.Tensor):
     """Computes maximum and argmax in the last two dimensions."""
 
     max_val_row, argmax_row = torch.max(a, dim=-2)
     max_val, argmax_col = torch.max(max_val_row, dim=-1)
-    argmax_row = argmax_row.view(argmax_col.numel(),-1)[torch.arange(argmax_col.numel()), argmax_col.view(-1)]
+    argmax_row = argmax_row.view(argmax_col.numel(), -1)[torch.arange(argmax_col.numel()), argmax_col.view(-1)]
     argmax_row = argmax_row.reshape(argmax_col.shape)
     argmax = torch.cat((argmax_row.unsqueeze(-1), argmax_col.unsqueeze(-1)), -1)
     return max_val, argmax
-def hann1d(sz: int, centered = True) -> torch.Tensor:
+
+
+def hann1d(sz: int, centered=True) -> torch.Tensor:
     """1D cosine window."""
     if centered:
         return 0.5 * (1 - torch.cos((2 * math.pi / (sz + 1)) * torch.arange(1, sz + 1).float()))
-    w = 0.5 * (1 + torch.cos((2 * math.pi / (sz + 2)) * torch.arange(0, sz//2 + 1).float()))
-    return torch.cat([w, w[1:sz-sz//2].flip((0,))])
-def hann2d(sz: torch.Tensor, centered = True) -> torch.Tensor:
+    w = 0.5 * (1 + torch.cos((2 * math.pi / (sz + 2)) * torch.arange(0, sz // 2 + 1).float()))
+    return torch.cat([w, w[1:sz - sz // 2].flip((0,))])
+
+
+def hann2d(sz: torch.Tensor, centered=True) -> torch.Tensor:
     """2D cosine window."""
     return hann1d(sz[0].item(), centered).reshape(1, 1, -1, 1) * hann1d(sz[1].item(), centered).reshape(1, 1, 1, -1)
-def hann2d_clipped(sz: torch.Tensor, effective_sz: torch.Tensor, centered = True) -> torch.Tensor:
+
+
+def hann2d_clipped(sz: torch.Tensor, effective_sz: torch.Tensor, centered=True) -> torch.Tensor:
     """1D clipped cosine window."""
 
     # Ensure that the difference is even
     effective_sz += (effective_sz - sz) % 2
-    effective_window = hann1d(effective_sz[0].item(), True).reshape(1, 1, -1, 1) * hann1d(effective_sz[1].item(), True).reshape(1, 1, 1, -1)
+    effective_window = hann1d(effective_sz[0].item(), True).reshape(1, 1, -1, 1) * hann1d(effective_sz[1].item(),
+                                                                                          True).reshape(1, 1, 1, -1)
 
     pad = (sz - effective_sz) / 2
 
@@ -472,11 +501,14 @@ def hann2d_clipped(sz: torch.Tensor, effective_sz: torch.Tensor, centered = True
         mid = (sz / 2).int()
         window_shift_lr = torch.cat((window[:, :, :, mid[1]:], window[:, :, :, :mid[1]]), 3)
         return torch.cat((window_shift_lr[:, :, mid[0]:, :], window_shift_lr[:, :, :mid[0], :]), 2)
+
+
 ####
 
-#pytracking/utils/params
+# pytracking/utils/params
 class TrackerParams:
     """Class for tracker parameters."""
+
     def set_default_values(self, default_vals: dict):
         for name, val in default_vals.items():
             if not hasattr(self, name):
@@ -496,15 +528,17 @@ class TrackerParams:
     def has(self, name: str):
         """Check if there exist a parameter with the given name."""
         return hasattr(self, name)
+
+
 ####
 
-#pytracking/features/augmentation
+# pytracking/features/augmentation
 class Transform:
     """Base data augmentation transform class."""
 
-    def __init__(self, output_sz = None, shift = None):
+    def __init__(self, output_sz=None, shift=None):
         self.output_sz = output_sz
-        self.shift = (0,0) if shift is None else shift
+        self.shift = (0, 0) if shift is None else shift
 
     def __call__(self, image, is_mask=False):
         raise NotImplementedError
@@ -528,18 +562,23 @@ class Transform:
         else:
             raise NotImplementedError
 
+
 class Identity(Transform):
     """Identity transformation."""
+
     def __call__(self, image, is_mask=False):
         return self.crop_to_output(image)
 
+
 class FlipHorizontal(Transform):
     """Flip along horizontal axis."""
+
     def __call__(self, image, is_mask=False):
         if isinstance(image, torch.Tensor):
             return self.crop_to_output(image.flip((3,)))
         else:
             return np.fliplr(image)
+
 
 class FlipVertical(Transform):
     """Flip along vertical axis."""
@@ -550,9 +589,11 @@ class FlipVertical(Transform):
         else:
             return np.flipud(image)
 
+
 class Translation(Transform):
     """Translate."""
-    def __init__(self, translation, output_sz = None, shift = None):
+
+    def __init__(self, translation, output_sz=None, shift=None):
         super().__init__(output_sz, shift)
         self.shift = (self.shift[0] + translation[0], self.shift[1] + translation[1])
 
@@ -562,9 +603,11 @@ class Translation(Transform):
         else:
             raise NotImplementedError
 
+
 class Scale(Transform):
     """Scale."""
-    def __init__(self, scale_factor, output_sz = None, shift = None):
+
+    def __init__(self, scale_factor, output_sz=None, shift=None):
         super().__init__(output_sz, shift)
         self.scale_factor = scale_factor
 
@@ -576,9 +619,9 @@ class Scale(Transform):
             if h_orig != w_orig:
                 raise NotImplementedError
 
-            h_new = round(h_orig /self.scale_factor)
+            h_new = round(h_orig / self.scale_factor)
             h_new += (h_new - h_orig) % 2
-            w_new = round(w_orig /self.scale_factor)
+            w_new = round(w_orig / self.scale_factor)
             w_new += (w_new - w_orig) % 2
 
             image_resized = F.interpolate(image, [h_new, w_new], mode='bilinear')
@@ -587,45 +630,52 @@ class Scale(Transform):
         else:
             raise NotImplementedError
 
+
 class Rotate(Transform):
     """Rotate with given angle."""
-    def __init__(self, angle, output_sz = None, shift = None):
+
+    def __init__(self, angle, output_sz=None, shift=None):
         super().__init__(output_sz, shift)
-        self.angle = math.pi * angle/180
+        self.angle = math.pi * angle / 180
 
     def __call__(self, image, is_mask=False):
         if isinstance(image, torch.Tensor):
             return self.crop_to_output(numpy_to_torch(self(torch_to_numpy(image))))
         else:
-            c = (np.expand_dims(np.array(image.shape[:2]),1)-1)/2
+            c = (np.expand_dims(np.array(image.shape[:2]), 1) - 1) / 2
             R = np.array([[math.cos(self.angle), math.sin(self.angle)],
                           [-math.sin(self.angle), math.cos(self.angle)]])
-            H =np.concatenate([R, c - R @ c], 1)
+            H = np.concatenate([R, c - R @ c], 1)
             return cv2.warpAffine(image, H, image.shape[1::-1], borderMode=cv2.BORDER_REPLICATE)
+
 
 class Blur(Transform):
     """Blur with given sigma (can be axis dependent)."""
-    def __init__(self, sigma, output_sz = None, shift = None):
+
+    def __init__(self, sigma, output_sz=None, shift=None):
         super().__init__(output_sz, shift)
         if isinstance(sigma, (float, int)):
             sigma = (sigma, sigma)
         self.sigma = sigma
-        self.filter_size = [math.ceil(2*s) for s in self.sigma]
-        x_coord = [torch.arange(-sz, sz+1, dtype=torch.float32) for sz in self.filter_size]
-        self.filter = [torch.exp(-(x**2)/(2*s**2)) for x, s in zip(x_coord, self.sigma)]
-        self.filter[0] = self.filter[0].view(1,1,-1,1) / self.filter[0].sum()
-        self.filter[1] = self.filter[1].view(1,1,1,-1) / self.filter[1].sum()
+        self.filter_size = [math.ceil(2 * s) for s in self.sigma]
+        x_coord = [torch.arange(-sz, sz + 1, dtype=torch.float32) for sz in self.filter_size]
+        self.filter = [torch.exp(-(x ** 2) / (2 * s ** 2)) for x, s in zip(x_coord, self.sigma)]
+        self.filter[0] = self.filter[0].view(1, 1, -1, 1) / self.filter[0].sum()
+        self.filter[1] = self.filter[1].view(1, 1, 1, -1) / self.filter[1].sum()
 
     def __call__(self, image, is_mask=False):
         if isinstance(image, torch.Tensor):
             sz = image.shape[2:]
-            im1 = F.conv2d(image.view(-1,1,sz[0],sz[1]), self.filter[0], padding=(self.filter_size[0],0))
-            return self.crop_to_output(F.conv2d(im1, self.filter[1], padding=(0,self.filter_size[1])).view(1,-1,sz[0],sz[1]))
+            im1 = F.conv2d(image.view(-1, 1, sz[0], sz[1]), self.filter[0], padding=(self.filter_size[0], 0))
+            return self.crop_to_output(
+                F.conv2d(im1, self.filter[1], padding=(0, self.filter_size[1])).view(1, -1, sz[0], sz[1]))
         else:
             raise NotImplementedError
+
+
 ####
 
-#ltr/models/layers/activation
+# ltr/models/layers/activation
 def softmax_reg(x: torch.Tensor, dim, reg=None):
     """Softmax with optinal denominator regularization."""
     if reg is None:
@@ -633,16 +683,18 @@ def softmax_reg(x: torch.Tensor, dim, reg=None):
     dim %= x.dim()
     if isinstance(reg, (float, int)):
         reg = x.new_tensor([reg])
-    reg = reg.expand([1 if d==dim else x.shape[d] for d in range(x.dim())])
+    reg = reg.expand([1 if d == dim else x.shape[d] for d in range(x.dim())])
     x = torch.cat((x, reg), dim=dim)
-    return torch.softmax(x, dim=dim)[[slice(-1) if d==dim else slice(None) for d in range(x.dim())]]
+    return torch.softmax(x, dim=dim)[[slice(-1) if d == dim else slice(None) for d in range(x.dim())]]
+
+
 ####
 
-#pytracking/libs/tensorlist
+# pytracking/libs/tensorlist
 class TensorList(list):
     """Container mainly used for lists of torch tensors. Extends lists with pytorch functionality."""
 
-    def __init__(self, list_of_tensors = None):
+    def __init__(self, list_of_tensors=None):
         if list_of_tensors is None:
             list_of_tensors = list()
         super(TensorList, self).__init__(list_of_tensors)
@@ -818,14 +870,18 @@ class TensorList(list):
     @staticmethod
     def _iterable(a):
         return isinstance(a, (TensorList, list))
+
+
 ####
 
-#pytracking.features.preprocessing
+# pytracking.features.preprocessing
 def numpy_to_torch(a: np.ndarray):
     return torch.from_numpy(a).float().permute(2, 0, 1).unsqueeze(0)
 
+
 def torch_to_numpy(a: torch.Tensor):
-    return a.squeeze(0).permute(1,2,0).numpy()
+    return a.squeeze(0).permute(1, 2, 0).numpy()
+
 
 def sample_patch_transformed(im, pos, scale, image_sz, transforms, is_mask=False):
     """Extract transformed image samples.
@@ -838,7 +894,7 @@ def sample_patch_transformed(im, pos, scale, image_sz, transforms, is_mask=False
     """
 
     # Get image patche
-    im_patch, _ = sample_patch(im, pos, scale*image_sz, image_sz, is_mask=is_mask)
+    im_patch, _ = sample_patch(im, pos, scale * image_sz, image_sz, is_mask=is_mask)
 
     # Apply transforms
     im_patches = torch.cat([T(im_patch, is_mask=is_mask) for T in transforms])
@@ -846,7 +902,7 @@ def sample_patch_transformed(im, pos, scale, image_sz, transforms, is_mask=False
     return im_patches
 
 
-def sample_patch_multiscale(im, pos, scales, image_sz, mode: str='replicate', max_scale_change=None):
+def sample_patch_multiscale(im, pos, scales, image_sz, mode: str = 'replicate', max_scale_change=None):
     """Extract image patches at multiple scales.
     args:
         im: Image.
@@ -860,12 +916,13 @@ def sample_patch_multiscale(im, pos, scales, image_sz, mode: str='replicate', ma
         scales = [scales]
 
     # Get image patches
-    patch_iter, coord_iter = zip(*(sample_patch(im, pos, s*image_sz, image_sz, mode=mode,
+    patch_iter, coord_iter = zip(*(sample_patch(im, pos, s * image_sz, image_sz, mode=mode,
                                                 max_scale_change=max_scale_change) for s in scales))
     im_patches = torch.cat(list(patch_iter))
     patch_coords = torch.cat(list(coord_iter))
 
-    return  im_patches, patch_coords
+    return im_patches, patch_coords
+
 
 def sample_patch(im: torch.Tensor, pos: torch.Tensor, sample_sz: torch.Tensor, output_sz: torch.Tensor = None,
                  mode: str = 'replicate', max_scale_change=None, is_mask=False):
@@ -907,13 +964,13 @@ def sample_patch(im: torch.Tensor, pos: torch.Tensor, sample_sz: torch.Tensor, o
     else:
         df = int(1)
 
-    sz = sample_sz.float() / df     # new size
+    sz = sample_sz.float() / df  # new size
 
     # Do downsampling
     if df > 1:
-        os = posl % df              # offset
-        posl = (posl - os) // df     # new position
-        im2 = im[..., os[0].item()::df, os[1].item()::df]   # downsample
+        os = posl % df  # offset
+        posl = (posl - os) // df  # new position
+        im2 = im[..., os[0].item()::df, os[1].item()::df]  # downsample
     else:
         im2 = im
 
@@ -922,7 +979,7 @@ def sample_patch(im: torch.Tensor, pos: torch.Tensor, sample_sz: torch.Tensor, o
 
     # Extract top and bottom coordinates
     tl = posl - (szl - 1) // 2
-    br = posl + szl//2 + 1
+    br = posl + szl // 2 + 1
 
     # Shift the crop to inside
     if mode == 'inside' or mode == 'inside_major':
@@ -941,12 +998,13 @@ def sample_patch(im: torch.Tensor, pos: torch.Tensor, sample_sz: torch.Tensor, o
 
     # Get image patch
     if not is_mask:
-        im_patch = F.pad(im2, (-tl[1].item(), br[1].item() - im2.shape[3], -tl[0].item(), br[0].item() - im2.shape[2]), pad_mode)
+        im_patch = F.pad(im2, (-tl[1].item(), br[1].item() - im2.shape[3], -tl[0].item(), br[0].item() - im2.shape[2]),
+                         pad_mode)
     else:
         im_patch = F.pad(im2, (-tl[1].item(), br[1].item() - im2.shape[3], -tl[0].item(), br[0].item() - im2.shape[2]))
 
     # Get image coordinates
-    patch_coord = df * torch.cat((tl, br)).view(1,4)
+    patch_coord = df * torch.cat((tl, br)).view(1, 4)
 
     if output_sz is None or (im_patch.shape[-2] == output_sz[0] and im_patch.shape[-1] == output_sz[1]):
         return im_patch.clone(), patch_coord
@@ -958,15 +1016,17 @@ def sample_patch(im: torch.Tensor, pos: torch.Tensor, sample_sz: torch.Tensor, o
         im_patch = F.interpolate(im_patch, output_sz.long().tolist(), mode='nearest')
 
     return im_patch, patch_coord
+
+
 ####
 
 def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, constructor_module=None, **kwargs):
     """Loads a network checkpoint file.
     """
-    #print("network_dir = " + network_dir)
+    # print("network_dir = " + network_dir)
     net_path = Path(network_dir)
     checkpoint = str(net_path)
-    #print('checkpoint = ' + checkpoint)
+    # print('checkpoint = ' + checkpoint)
     try:
         checkpoint_path = os.path.expanduser(checkpoint)
     except:
@@ -989,6 +1049,7 @@ def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, c
         net.info = checkpoint_dict['net_info']
 
     return net, checkpoint_dict
+
 
 class NetWrapper:
     """Used for wrapping networks in pytracking.
@@ -1025,6 +1086,7 @@ class NetWrapper:
 
     def initialize(self):
         self.load_network()
+
 
 class NetWithBackbone(NetWrapper):
     """Wraps a network with a common backbone.
@@ -1063,10 +1125,12 @@ class NetWithBackbone(NetWrapper):
         im = self.preprocess_image(im)
         return self.net.extract_backbone_features(im)
 
+
 class DiMP:
     def __init__(self, params):
         self.params = params
         self.visdom = None
+
     multiobj_mode = 'parallel'
 
     def initialize_features(self):
@@ -1607,7 +1671,7 @@ class DiMP:
         if self.params.iounet_augmentation:
             for T in self.transforms:
                 if not isinstance(T, (
-                        Identity, Translation, FlipHorizontal,FlipVertical,Blur)):
+                        Identity, Translation, FlipHorizontal, FlipVertical, Blur)):
                     break
                 target_boxes.append(self.classifier_target_box + torch.Tensor([T.shift[1], T.shift[0], 0, 0]))
         else:
@@ -1651,7 +1715,7 @@ class DiMP:
             if self.params.get('use_clipped_window', False):
                 self.output_window = hann2d_clipped(self.output_sz.long(), (
                         self.output_sz * self.params.effective_search_area / self.params.search_area_scale).long(),
-                                                        centered=True).to(self.params.device)
+                                                    centered=True).to(self.params.device)
             else:
                 self.output_window = hann2d(self.output_sz.long(), centered=True).to(self.params.device)
             self.output_window = self.output_window.squeeze(0)
@@ -1933,14 +1997,7 @@ class DBLoader(object):
         self.im_paths.sort()
         self.init_box = self.get_init_box()
 
-    def get_init_box(self):
-        # im_path = self.im_paths[0]
-        # first_frame = cv2.imread(im_path)
-        # init_box = cv2.selectROI(os.path.basename(self.data_dir), first_frame, False, False)
-        init_box = np.array(np.loadtxt(self.gt_file, delimiter=',', dtype=np.float64))
-        if len(init_box.shape) == 2:
-            return init_box[0]
-        return init_box
+
 
     def get_gt_box(self):
         init_box = np.array(np.loadtxt(self.gt_file, delimiter=',', dtype=np.float64))
@@ -1990,6 +2047,18 @@ def get_axis_aligned_bbox(region):
         cy = y + h / 2
     return cx, cy, w, h
 
+def get_init_box(im_dir):
+    path = os.path.join(im_dir, "groundtruth.txt")
+    ground_truth_rect = np.loadtxt(path, delimiter=',', dtype=np.float64)
+    if len(ground_truth_rect.shape) == 2:
+        return ground_truth_rect[0]
+    return ground_truth_rect
+
+def get_new_frame(frame_id, im_dir):
+    im_paths = glob.glob(os.path.join(im_dir, '*.jpg'))
+    if len(im_paths) <= frame_id:
+        return None
+    return cv2.cvtColor(cv2.imread(im_paths[frame_id]), cv2.COLOR_BGR2RGB)
 
 def get_dimp(img, init_box, model_path):
     """ set up DiMPsuper as the base tracker """
@@ -2084,36 +2153,43 @@ def get_ar(img, init_box, ar_path):
     return RF_module
 
 
-def save_bb(file, data):
-    tracked_bb = np.array(data).astype(int)
-    np.savetxt(file, tracked_bb, fmt="%d", delimiter=',')
+def save_bb(data_dir, res):
+    file = open("tracking res/" + os.path.split(data_dir)[1] + ".txt", "a")
+    res = np.rint(np.array(res))
+    res = res.reshape(1, res.shape[0])
+    np.savetxt(file, res, fmt='%.2f', delimiter=',')
+    file.close()
 
+def vis_video(data_dir, image, frame_id, res):
+    color = (0, 0, 255)
+    s_x = int(res[0])
+    s_y = int(res[1])
+    e_x = int(res[0] + res[2])
+    e_y = int(res[1] + res[3])
+    cv2.rectangle(image, (s_x, s_y), (e_x, e_y), color, 2)
+    cv2.imwrite(data_dir + "\\frame%d.jpg" % frame_id, image)
 
-def demo(base_path, ar_path, data_dir, use_ar=True):
-    debug_loader = DBLoader(data_dir=data_dir)
-
-    handle = debug_loader
-    init_box = handle.region()
-    gt = handle.get_gt_box()
-    vis = handle.get_abs_info()
-    imagefile, _ = handle.frame()
-    img = cv2.cvtColor(cv2.imread(imagefile), cv2.COLOR_BGR2RGB)  # Right
+def track_images(get_init_box, get_new_frame, model_path, data_path, save_res, use_ar=True):
+    init_box = get_init_box(data_path)
+    img = get_new_frame(0, data_path)
     H, W, _ = img.shape
 
     """ Step 1: set up base tracker and Alpha-Refine """
-    tracker = get_dimp(img, init_box, base_path)
+    dimp_path = os.path.join(model_path, 'new_DiMPnet_ep0005.pth.tar')
+    tracker = get_dimp(img, init_box, dimp_path)
     if use_ar:
+        ar_path = os.path.join(model_path, 'SEcmnet_ep0040-c.pth.tar')
         RF_module = get_ar(img, init_box, ar_path)
-    file = open("tracking res/" + os.path.split(data_dir)[1] + ".txt", "w")
-    res = [init_box]
+    file = open("tracking res/" + os.path.split(data_path)[1] + ".txt", "w")
+    save_res(data_path, init_box)
     ts = []
+    frame_id = 1
     # OPE tracking
     while True:
         start = time.time()
-        imagefile, _ = handle.frame()
-        if not imagefile:
+        img = get_new_frame(frame_id, data_path)
+        if img is None:
             break
-        img = cv2.cvtColor(cv2.imread(imagefile), cv2.COLOR_BGR2RGB)  # Right
 
         """ Step 2: base tracker prediction """
         # track with base tracker
@@ -2138,30 +2214,67 @@ def demo(base_path, ar_path, data_dir, use_ar=True):
         tracker.target_sz = new_target_sz
         tracker.target_scale = new_scale
 
-        res.append(pred_bbox)
-
+        save_res(data_path, pred_bbox)
+        frame_id += 1
         ts.append(time.time() - start)
-    save_bb(file, res)
+
     file.close()
     fps = len(ts) / sum(t for t in ts)
-    return fps, get_iou(np.array(res), gt, vis)
+    print("FPS = {}".format(fps))
 
-def get_iou(output, tr, vis):
-    n = min(tr.shape[0], output.shape[0])
-    iou = []
-    for i in range(1, n):
-        if vis[i] == False:
-            x_l = max(tr[i][0], output[i][0])
-            y_top = max(tr[i][1], output[i][1])
-            x_r = min(tr[i][0] + tr[i][2], output[i][0] + output[i][2])
-            y_bot = min(tr[i][1] + tr[i][3], output[i][1] + output[i][3])
-            if x_r < x_l or y_bot < y_top:
-                iou.append(0.0)
-            else:
-                inter = (x_r - x_l) * (y_bot - y_top)
-                iou.append(inter / (tr[i][2] * tr[i][3] + output[i][2] * output[i][3] - inter))
-    # print(iou)
-    return np.mean(iou)
+
+def track_video(get_init_box, model_path, video_path, save_res, use_ar=True):
+    vidcap = cv2.VideoCapture(video_path)
+    vis_dir = os.path.join(os.path.split(video_path)[0], "vis_res")
+    if not os.path.exists(vis_dir):
+        os.mkdir(vis_dir)
+    success, image = vidcap.read()
+    init_box = get_init_box(os.path.split(video_path)[0])
+    H, W, _ = image.shape
+
+    """ Step 1: set up base tracker and Alpha-Refine """
+    dimp_path = os.path.join(model_path, 'new_DiMPnet_ep0005.pth.tar')
+    tracker = get_dimp(image, init_box, dimp_path)
+    if use_ar:
+        ar_path = os.path.join(model_path, 'SEcmnet_ep0040-c.pth.tar')
+        RF_module = get_ar(image, init_box, ar_path)
+    save_res(vis_dir, image, 1, init_box)
+    ts = []
+    frame_id = 2
+    while success:
+        # vidcap.set(cv2.CAP_PROP_POS_MSEC,(count*1000))    # added this line
+        start = time.time()
+        success, image = vidcap.read()
+        if not success:
+            break
+        """ Step 2: base tracker prediction """
+        # track with base tracker
+        outputs = tracker.track(image)
+        pred_bbox = outputs['target_bbox']
+
+        if use_ar:
+            """ Step 3: refine tracking results with Alpha-Refine """
+            pred_bbox = RF_module.refine(image, np.array(pred_bbox))
+
+        """ Step 4: update base tracker's state with refined result """
+        # x1, y1, w, h = pred_bbox.tolist()
+        x1, y1, w, h = pred_bbox[0], pred_bbox[1], pred_bbox[2], pred_bbox[3]
+        x1, y1, x2, y2 = bbox_clip(x1, y1, x1 + w, y1 + h, (H, W))
+        w = x2 - x1
+        h = y2 - y1
+        new_pos = torch.from_numpy(np.array([y1 + h / 2, x1 + w / 2]).astype(np.float32))
+        new_target_sz = torch.from_numpy(np.array([h, w]).astype(np.float32))
+        new_scale = torch.sqrt(new_target_sz.prod() / tracker.base_target_sz.prod())
+
+        tracker.pos = new_pos.clone()
+        tracker.target_sz = new_target_sz
+        tracker.target_scale = new_scale
+
+        save_res(vis_dir, image, frame_id, pred_bbox)
+        frame_id += 1
+        ts.append(time.time() - start)
+    fps = len(ts) / sum(t for t in ts)
+    print("FPS = {}".format(fps))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run tracker on sequence or dataset.')
@@ -2170,44 +2283,8 @@ if __name__ == '__main__':
     parser.add_argument('use_refine', type=str, default=None, help='Use Refine module')
     args = parser.parse_args()
     use_ar = args.use_refine.lower() in ("yes", "true", "t", "1")
-    has_folders = 0
-    '''
-    if not os.path.exists(args.output_path):
-        os.mkdir(args.output_path)
-    '''
-    for f in os.listdir(args.dataset_path):
-        if os.path.isdir(os.path.join(args.dataset_path, f)):
-            has_folders = 1
-            break
-    # path to video sequence - any directory with series of images will be OK
-    # data_dir = '../Downloads/Stark-main/data/got10k/test/kolya2'
 
-    # path to model_file of base SEcmnet_ep0040.pthtracker - model can be download from:
-    # https://drive.google.com/open?id=1qDptswis2FxihLRYLVRGDvx6aUoAVVLv
-    base_path = os.path.join(args.model_path, 'new_DiMPnet_ep0005.pth.tar')
-
-    # path to model_file of Alpha-Refine - the model can be download from
-    # https://drive.google.com/file/d/1drLqNq4r9g4ZqGtOGuuLCmHJDh20Fu1m/view
-    ar_path = os.path.join(args.model_path, 'SEcmnet_ep0040-c.pth.tar')
-    # r'C:\Users\zadorozhnyy.v\AlphaRefine\checkpoints\ltr\dimp\super_dimp/DiMPnet_ep0005.pth.tar'
-
-    if has_folders == 1:
-        n = 0
-        l = 0
-        fps = []
-        for f in os.listdir(args.dataset_path):
-            data_path = os.path.join(args.dataset_path, f)
-            if os.path.isdir(data_path):
-                n += 1
-                print("sequence: " + data_path)
-                t, iou = demo(base_path, ar_path, data_path, use_ar)
-                print("IOU = {}".format(iou))
-                print('FPS: {}'.format(t))
-                l += iou
-                fps.append(t)
-        print("Average IOU = {}".format(l / n))
-        print("Average FPS = {}".format(np.mean(np.array(fps))))
+    if os.path.isfile(args.dataset_path):
+        track_video(get_init_box, args.model_path, args.dataset_path, vis_video, use_ar)
     else:
-        t, iou = demo(base_path, ar_path, args.dataset_path, use_ar)
-        print("IOU = {}".format(iou))
-        print("FPS = {}".format(t))
+        track_images(get_init_box, get_new_frame, args.model_path, args.dataset_path, save_bb, use_ar)
