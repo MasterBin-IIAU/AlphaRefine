@@ -10,6 +10,7 @@ from .utils import mask2bbox, delta2bbox
 
 class RefineModule(object):
     def __init__(self, refine_net_dir, selector=None, search_factor=2.0, input_sz=256):
+        print('refine_net_dir = ' + refine_net_dir)
         self.refine_network = self.get_network(refine_net_dir)
         assert isinstance(selector, (int, str))
         self.branch_selector = selector if isinstance(selector, int) else self.get_network(selector)
@@ -168,6 +169,8 @@ class RefineModule(object):
                          delta_w, delta_h])
 
     def get_network(self, checkpoint_dir):
+        print('refine network load')
+        print('checkpoint_dir = ' + checkpoint_dir)
         network = load_network(checkpoint_dir)
         network.cuda()
         network.eval()

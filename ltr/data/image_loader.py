@@ -45,7 +45,7 @@ def default_image_loader(path):
 
 default_image_loader.use_jpeg4py = None
 
-
+'''
 def jpeg4py_loader(path):
     """ Image reading using jpeg4py https://github.com/ajkxyz/jpeg4py"""
     try:
@@ -55,7 +55,7 @@ def jpeg4py_loader(path):
         print(e)
         return None
 
-
+'''
 def opencv_loader(path):
     """ Read image using opencv's imread function and returns it in rgb format"""
     try:

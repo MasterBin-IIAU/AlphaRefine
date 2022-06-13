@@ -49,8 +49,12 @@ class Got10k(BaseDataset):
             if seq_ids is not None:
                 raise ValueError('Cannot set both split_name and seq_ids.')
             ltr_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../..')
+            print('ltr_path:')
+            print(os.path.exists(ltr_path))
+            print(os.listdir(ltr_path))
             if split == 'train':
                 file_path = os.path.join(ltr_path, 'data_specs', 'got10k_train_split.txt')
+                print(file_path)
             elif split == 'val':
                 file_path = os.path.join(ltr_path, 'data_specs', 'got10k_val_split.txt')
             elif split == 'vottrain':
@@ -63,7 +67,8 @@ class Got10k(BaseDataset):
         elif seq_ids is None:
             seq_ids = list(range(0, len(self.sequence_list)))
         # self.seq_ids = seq_ids
-
+        print('seq_ids = ')
+        print(len(seq_ids))
         self.sequence_list = [self.sequence_list[i] for i in seq_ids] # original
         # self.sequence_list = [self.sequence_list[i-1] for i in seq_ids] # my changed version
 

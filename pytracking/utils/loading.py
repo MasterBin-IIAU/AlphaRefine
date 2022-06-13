@@ -10,6 +10,7 @@ def load_network(net_path, **kwargs):
                    See ltr.admin.loading.load_network for further details.
         **kwargs - Additional key-word arguments that are sent to ltr.admin.loading.load_network.
     """
+    print('net_path = ' + str(net_path))
     kwargs['backbone_pretrained'] = False
     if os.path.isabs(net_path):
         path_full = net_path
@@ -28,6 +29,7 @@ def load_network(net_path, **kwargs):
         assert net is not None, 'Failed to load network'
     else:
         path_full = os.path.join(env_settings().network_path, net_path)
+        print('path_full = ' + path_full)
         net, _ = ltr_loading.load_network(path_full, **kwargs)
 
     return net

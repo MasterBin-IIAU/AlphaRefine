@@ -21,7 +21,7 @@ def run(settings):
     # Most common settings are assigned in the settings struct
     settings.description = 'Settings of SEcm module'
     ''' !!! some important hyperparameters !!! '''
-    settings.batch_size = 32  # Batch size
+    settings.batch_size = 8  # Batch size
     settings.search_area_factor = 2.0  # Image patch size relative to target size
     settings.feature_sz = 16  # Size of feature map
     settings.output_sz = settings.feature_sz * 16  # Size of input image patches
@@ -30,8 +30,8 @@ def run(settings):
     settings.center_jitter_factor = {'train': 0, 'test': 0.25}
     settings.scale_jitter_factor = {'train': 0, 'test': 0.25}
     settings.max_gap = 50
-    settings.sample_per_epoch = 4000
-    settings.save_interval = 5  # the interval of saving the checkpoints
+    settings.sample_per_epoch = 1000
+    settings.save_interval = 1  # the interval of saving the checkpoints
 
     '''others'''
     settings.print_interval = 100  # How often to print loss and other info
@@ -59,6 +59,7 @@ def run(settings):
     # Train datasets
     # - bbox and corner datasets
     got_10k_train = Got10k(settings.env.got10k_dir, split='train')
+    '''
     lasot_train = Lasot(split='train')
     coco_train = MSCOCOSeq()
     imagenet_vid = ImagenetVID()
@@ -67,24 +68,25 @@ def run(settings):
     # - mask datasets
     youtube_vos = Youtube_VOS()
     saliency = Saliency()
-
+    '''
     # The sampler for training
     '''Build training dataset. focus on "__getitem__" and "__len__"'''
-    dataset_train = SEsampler.SEMaskSampler([lasot_train,got_10k_train,coco_train,imagenet_vid,imagenet_det,youtube_vos,saliency],
-                                            [1, 1, 1, 1, 1, 2, 3],
+    dataset_train = SEsampler.SEMaskSampler([got_10k_train], [1],
                                             samples_per_epoch= settings.sample_per_epoch * settings.batch_size,
                                             max_gap=settings.max_gap,
                                             processing=data_processing_train)
 
     # The loader for training
     ''' using distributed sampler '''
-    train_sampler = DistributedSampler(dataset_train)
+    #train_sampler = DistributedSampler(dataset_train)
+    train_sampler=None
     ''' "sampler" is exclusive with "shuffle" '''
     loader_train = LTRLoader('train', dataset_train, training=True, batch_size=settings.batch_size, num_workers=settings.num_workers,
                              drop_last=True, stack_dim=1, sampler=train_sampler, pin_memory=False)
 
     ''' 2. build validation dataset and dataloader '''
-    lasot_test = Lasot(split='test')
+    #lasot_test = Lasot(split='test')
+    lasot_test = Got10k(settings.env.got10k_dir, split='val')
     # The augmentation transform applied to the validation set (individually to each image in the pair)
     transform_val = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),
                                                     torchvision.transforms.Normalize(mean=settings.normalize_mean, std=settings.normalize_std)])
@@ -102,7 +104,7 @@ def run(settings):
 
     # The loader for validation
     loader_val = LTRLoader('val', dataset_val, training=False, batch_size=settings.batch_size, num_workers=settings.num_workers,
-                           shuffle=False, drop_last=True, epoch_interval=5, stack_dim=1)
+                           shuffle=False, drop_last=True, epoch_interval=1, stack_dim=1)
 
     # Create network
     net = SEx.SEcm_resnet34(backbone_pretrained=True,
@@ -112,7 +114,7 @@ def run(settings):
 
     # wrap network to distributed one
     net.cuda()
-    net = torch.nn.parallel.DistributedDataParallel(net, device_ids=[settings.local_rank], find_unused_parameters=True)
+    #net = torch.nn.parallel.DistributedDataParallel(net, device_ids=[settings.local_rank], find_unused_parameters=True)
 
     # Set objective
     objective = {}

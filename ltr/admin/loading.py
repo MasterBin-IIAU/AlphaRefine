@@ -44,18 +44,20 @@ def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, c
 
     The extra keyword arguments are supplied to the network constructor to replace saved ones.
     """
-
+    print('network_dir = ' + network_dir)
     if network_dir is not None:
         net_path = Path(network_dir)
     else:
         net_path = None
-
     if net_path is not None and net_path.is_file():
         checkpoint = str(net_path)
-
+        print('checkpoint = ' + checkpoint)
+    #print('net_path = ' + str(net_path))
+    #print(net_path.glob('*.pth.tar'))
     if checkpoint is None:
         # Load most recent checkpoint
         checkpoint_list = sorted(net_path.glob('*.pth.tar'))
+        print(checkpoint_list)
         if checkpoint_list:
             checkpoint_path = checkpoint_list[-1]
         else:
@@ -77,10 +79,14 @@ def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, c
 
     # Load network
     checkpoint_dict = torch_load_legacy(checkpoint_path)
-
+    '''
+    print("checkpoint dict:")
+    print(checkpoint_dict.keys())
+    '''
     # Construct network model
     if 'constructor' in checkpoint_dict and checkpoint_dict['constructor'] is not None:
         net_constr = checkpoint_dict['constructor']
+        '''
         if constructor_fun_name is not None:
             net_constr.fun_name = constructor_fun_name
         if constructor_module is not None:
@@ -95,6 +101,7 @@ def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, c
                 net_constr.kwds[arg] = val
             else:
                 print('WARNING: Keyword argument "{}" not found when loading network. It was ignored.'.format(arg))
+        '''
         net = net_constr.get()
     else:
         raise RuntimeError('No constructor for the given network.')
@@ -120,7 +127,6 @@ def torch_load_legacy(path):
 
     # Setup legacy env (for older networks)
     _setup_legacy_env()
-
     # Load network
     checkpoint_dict = torch.load(path, map_location='cpu')
 
