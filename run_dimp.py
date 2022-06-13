@@ -835,6 +835,7 @@ def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, c
         raise TypeError
 
     # Load network
+    print('checkpoint_path : {}'.format(checkpoint_path))
     checkpoint_dict = torch.load(checkpoint_path, map_location='cpu')
     # Construct network model
     if 'constructor' in checkpoint_dict and checkpoint_dict['constructor'] is not None:
